@@ -293,7 +293,7 @@ func (u *UserRepository) SetCommandToUser(user *FMDUser, cmd string, cmdTime uin
 	user.CommandSig = cmdSig
 
 	if cmd != "" {
-		u.pushUser(user)
+		u.PushUser(user)
 	}
 
 	u.UB.Save(&user)
@@ -396,7 +396,7 @@ func (u *UserRepository) RequestAccess(id string, innerPwHash string, sessionDur
 				user, err := u.UB.GetByID(id)
 				if err == nil {
 					if user.CommandToUser != "" {
-						u.pushUser(user)
+						u.PushUser(user)
 					}
 				}
 			}()
@@ -413,7 +413,7 @@ func (u *UserRepository) RequestAccess(id string, innerPwHash string, sessionDur
 	}
 }
 
-func (u *UserRepository) pushUser(user *FMDUser) {
+func (u *UserRepository) PushUser(user *FMDUser) {
 	pushUrl := strings.Replace(u.GetPushUrl(user), "/UP?", "/message?", -1)
 
 	if len(pushUrl) == 0 {
