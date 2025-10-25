@@ -12,6 +12,7 @@ config.yml
 fmdserver
 findmydeviceserver
 fmd-server
+fmd-server-ctl
 fmdDBViewer
 cmd/fmd.db
 cmd/config.yml2

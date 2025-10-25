@@ -164,3 +164,30 @@ func (db *FMDDB) Delete(value interface{}) int64 {
 	var result = db.DB.Select(clause.Associations).Delete(value)
 	return result.RowsAffected
 }
+
+func (db *FMDDB) GetUsersCount() (int64, error) {
+	var count int64
+	result := db.DB.Model(&FMDUser{}).Count(&count)
+
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	return count, nil
+}
+
+func (db *FMDDB) GetUsersLastSeenBefore(unixSeconds int64) ([]FMDUser, error) {
+	var users []FMDUser
+
+	result := db.DB.
+		// Select only the fields that are necessary for where this function is used.
+		Select("uid", "last_seen_time", "push_url").
+		Where("last_seen_time < ?", unixSeconds).
+		// Order: First all empty push URLs. Then from old to new last seen times.
+		Order("(push_url IS NULL OR push_url = '') DESC, last_seen_time ASC, uid ASC").
+		Find(&users)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return users, nil
+}

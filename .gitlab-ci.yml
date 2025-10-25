@@ -137,10 +137,12 @@ compile:
       artifacts: true
   script:
     - *go-setup
-    - go build -o fmdserver
+    - go build -o fmd-server
+    - go build -o fmd-server-ctl ./ctl
   artifacts:
     paths:
-      - fmdserver
+      - fmd-server
+      - fmd-server-ctl
 
 docker-build:
   image: docker:latest
