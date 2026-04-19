@@ -4,8 +4,7 @@ try {
   const theme = stored ? JSON.parse(stored).state.theme : 'system';
   const isDark =
     theme === 'dark' ||
-    (theme === 'system' &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches);
+    (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
   if (isDark) {
     document.documentElement.classList.add('dark');
   }

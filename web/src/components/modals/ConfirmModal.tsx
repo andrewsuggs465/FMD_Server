@@ -44,10 +44,7 @@ export const ConfirmModal = ({
   cancelText = cancelText ?? t('cancel');
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(open) => !open && onCancel && onCancel()}
-    >
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onCancel && onCancel()}>
       <DialogContent className="sm:max-w-md" showCloseButton={false}>
         <DialogHeader>
           <div className="flex items-center gap-3 pb-4">
@@ -57,11 +54,7 @@ export const ConfirmModal = ({
               </div>
             )}
 
-            <DialogTitle
-              className={cn(
-                isDestructive ? 'text-red-600 dark:text-red-400' : ''
-              )}
-            >
+            <DialogTitle className={cn(isDestructive ? 'text-red-600 dark:text-red-400' : '')}>
               {title}
             </DialogTitle>
           </div>

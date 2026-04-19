@@ -33,16 +33,12 @@ const calculateZoomLevel = (accuracy?: number): number => {
   // accuracy 100-500m: zoom 14-15
   // accuracy 500-2000m: zoom 12-13
   // accuracy > 2000m: zoom 10-11
-  const zoom = Math.max(
-    10,
-    Math.min(17, 17 - Math.floor(Math.log2(accuracy / 100)))
-  );
+  const zoom = Math.max(10, Math.min(17, 17 - Math.floor(Math.log2(accuracy / 100))));
   return zoom;
 };
 
 export const LocationMap = () => {
-  const { locations, units, currentLocationIndex, isLocationsLoading } =
-    useStore();
+  const { locations, units, currentLocationIndex, isLocationsLoading } = useStore();
 
   const { t } = useTranslation('dashboard');
 
@@ -77,12 +73,7 @@ export const LocationMap = () => {
 
   // The basic map view
   useEffect(() => {
-    if (
-      !mapRef.current ||
-      mapInstanceRef.current ||
-      isLocationsLoading ||
-      !tileServerUrl
-    ) {
+    if (!mapRef.current || mapInstanceRef.current || isLocationsLoading || !tileServerUrl) {
       return;
     }
 
@@ -116,17 +107,13 @@ export const LocationMap = () => {
         const initialView: [number, number] = firstLocation
           ? [firstLocation.lat, firstLocation.lon]
           : [20, 0];
-        const initialZoom = firstLocation
-          ? calculateZoomLevel(firstLocation.accuracy)
-          : 2;
+        const initialZoom = firstLocation ? calculateZoomLevel(firstLocation.accuracy) : 2;
 
         mapInstanceRef.current = leafletRef.current
           .map(mapRef.current)
           .setView(initialView, initialZoom);
 
-        markersLayerRef.current = leafletRef.current
-          .layerGroup()
-          .addTo(mapInstanceRef.current);
+        markersLayerRef.current = leafletRef.current.layerGroup().addTo(mapInstanceRef.current);
 
         accuracyCirclesLayerRef.current = leafletRef.current
           .layerGroup()
@@ -134,8 +121,7 @@ export const LocationMap = () => {
 
         tileLayerRef.current = leafletRef.current
           .tileLayer(tileServerUrl, {
-            attribution:
-              '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             maxZoom: 19,
           })
           .addTo(mapInstanceRef.current);
@@ -195,9 +181,7 @@ export const LocationMap = () => {
 
     locationCacheRef.current.add(currentLocationIndex);
 
-    const cachedIndices = Array.from(locationCacheRef.current).sort(
-      (a, b) => a - b
-    );
+    const cachedIndices = Array.from(locationCacheRef.current).sort((a, b) => a - b);
     const cachedLocations = cachedIndices.map((idx) => locations[idx]);
 
     markersLayerRef.current.clearLayers();
@@ -206,10 +190,7 @@ export const LocationMap = () => {
       polylineRef.current.remove();
     }
 
-    const latLngs: [number, number][] = cachedLocations.map((loc) => [
-      loc.lat,
-      loc.lon,
-    ]);
+    const latLngs: [number, number][] = cachedLocations.map((loc) => [loc.lat, loc.lon]);
 
     if (latLngs.length > 1) {
       polylineRef.current = leafletRef.current
@@ -262,9 +243,7 @@ export const LocationMap = () => {
         idx >= currentLocationIndex - ACCURACY_CIRCLE_RANGE &&
         idx <= currentLocationIndex + ACCURACY_CIRCLE_RANGE
       ) {
-        const circleColor = isCurrentLocation
-          ? mapAccentColor
-          : mapPrimaryColor;
+        const circleColor = isCurrentLocation ? mapAccentColor : mapPrimaryColor;
 
         leafletRef.current
           .circle([loc.lat, loc.lon], {
@@ -292,14 +271,7 @@ export const LocationMap = () => {
       }
       lastLocationRef.current = { lat, lon };
     }
-  }, [
-    currentLocationIndex,
-    units,
-    locations,
-    mapPrimaryColor,
-    mapAccentColor,
-    mapReady,
-  ]);
+  }, [currentLocationIndex, units, locations, mapPrimaryColor, mapAccentColor, mapReady]);
 
   return (
     <div className="bg-fmd-light dark:bg-fmd-dark relative flex h-full w-full flex-col rounded-lg">

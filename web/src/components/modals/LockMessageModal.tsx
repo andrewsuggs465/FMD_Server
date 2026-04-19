@@ -10,11 +10,7 @@ interface LockMessageModalProps {
   executeCommand: (command: string, baseCommand: string) => void;
 }
 
-export const LockMessageModal = ({
-  isOpen,
-  onClose,
-  executeCommand,
-}: LockMessageModalProps) => {
+export const LockMessageModal = ({ isOpen, onClose, executeCommand }: LockMessageModalProps) => {
   const { t } = useTranslation('modals');
   const [message, setMessage] = useState('');
 
@@ -42,9 +38,7 @@ export const LockMessageModal = ({
         placeholder={t('lock.message_placeholder')}
         autoComplete="off"
       />
-      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-        {t('lock.message_hint')}
-      </p>
+      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">{t('lock.message_hint')}</p>
     </ConfirmModal>
   );
 };

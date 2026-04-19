@@ -1,9 +1,4 @@
-import {
-  BatteryFull,
-  BatteryMedium,
-  BatteryLow,
-  BatteryWarning,
-} from 'lucide-react';
+import { BatteryFull, BatteryMedium, BatteryLow, BatteryWarning } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 interface BatteryIndicatorProps {
@@ -11,10 +6,7 @@ interface BatteryIndicatorProps {
   className?: string;
 }
 
-export const BatteryIndicator = ({
-  percentage,
-  className,
-}: BatteryIndicatorProps) => {
+export const BatteryIndicator = ({ percentage, className }: BatteryIndicatorProps) => {
   const getBatteryDisplay = () => {
     // Ranges are not evenly spread, but based on subjective choices.
     if (percentage >= 75)
@@ -40,9 +32,7 @@ export const BatteryIndicator = ({
   return (
     <div className={cn('flex items-center gap-2', className)}>
       <Icon className={cn('h-4 w-4', color)} />
-      <span className="text-lg font-semibold text-gray-900 dark:text-white">
-        {percentage}%
-      </span>
+      <span className="text-lg font-semibold text-gray-900 dark:text-white">{percentage}%</span>
     </div>
   );
 };

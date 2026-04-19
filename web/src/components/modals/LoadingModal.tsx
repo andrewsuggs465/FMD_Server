@@ -14,11 +14,7 @@ interface LoadingModalProps {
   message: string;
 }
 
-export const LoadingModal = ({
-  isOpen,
-  title,
-  message = '',
-}: LoadingModalProps) => {
+export const LoadingModal = ({ isOpen, title, message = '' }: LoadingModalProps) => {
   const { t } = useTranslation('modals');
   title = title ?? t('loading.title');
 

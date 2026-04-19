@@ -31,17 +31,13 @@ export const ActionItem = ({
       <div
         className={cn(
           'rounded-lg p-2',
-          isDestructive
-            ? 'bg-red-100 dark:bg-red-950'
-            : 'bg-gray-100 dark:bg-gray-800'
+          isDestructive ? 'bg-red-100 dark:bg-red-950' : 'bg-gray-100 dark:bg-gray-800'
         )}
       >
         <Icon
           className={cn(
             'h-5 w-5',
-            isDestructive
-              ? 'text-red-600 dark:text-red-400'
-              : 'text-gray-700 dark:text-gray-300'
+            isDestructive ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-gray-300'
           )}
         />
       </div>
@@ -49,9 +45,7 @@ export const ActionItem = ({
         <div
           className={cn(
             'font-medium',
-            isDestructive
-              ? 'text-red-600 dark:text-red-400'
-              : 'text-gray-900 dark:text-white'
+            isDestructive ? 'text-red-600 dark:text-red-400' : 'text-gray-900 dark:text-white'
           )}
         >
           {title}

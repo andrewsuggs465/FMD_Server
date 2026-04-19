@@ -11,8 +11,7 @@ function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-    request.onerror = () =>
-      reject(new Error(request.error?.message || 'Failed to open database'));
+    request.onerror = () => reject(new Error(request.error?.message || 'Failed to open database'));
     request.onsuccess = () => resolve(request.result);
 
     request.onupgradeneeded = (event) => {
@@ -31,8 +30,7 @@ export async function storeKeys(keys: KeyStore): Promise<void> {
     const store = transaction.objectStore(STORE_NAME);
     const request = store.put(keys, 'current');
 
-    request.onerror = () =>
-      reject(new Error(request.error?.message || 'Failed to store keys'));
+    request.onerror = () => reject(new Error(request.error?.message || 'Failed to store keys'));
     request.onsuccess = () => resolve();
   });
 }
@@ -44,10 +42,8 @@ export async function getKeys(): Promise<KeyStore | null> {
     const store = transaction.objectStore(STORE_NAME);
     const request = store.get('current');
 
-    request.onerror = () =>
-      reject(new Error(request.error?.message || 'Failed to get keys'));
-    request.onsuccess = () =>
-      resolve((request.result as KeyStore | undefined) || null);
+    request.onerror = () => reject(new Error(request.error?.message || 'Failed to get keys'));
+    request.onsuccess = () => resolve((request.result as KeyStore | undefined) || null);
   });
 }
 
@@ -58,8 +54,7 @@ export async function clearKeys(): Promise<void> {
     const store = transaction.objectStore(STORE_NAME);
     const request = store.delete('current');
 
-    request.onerror = () =>
-      reject(new Error(request.error?.message || 'Failed to clear keys'));
+    request.onerror = () => reject(new Error(request.error?.message || 'Failed to clear keys'));
     request.onsuccess = () => resolve();
   });
 }

@@ -38,14 +38,10 @@ export const ENDPOINTS = {
 
 export class ApiV1Service extends BaseApiService {
   async getSalt(userName: string): Promise<string> {
-    const response = await requestObject<DataPackage>(
-      ENDPOINTS.SALT,
-      HTTP.PUT,
-      {
-        IDT: userName,
-        Data: 'unused',
-      }
-    );
+    const response = await requestObject<DataPackage>(ENDPOINTS.SALT, HTTP.PUT, {
+      IDT: userName,
+      Data: 'unused',
+    });
     return response.Data;
   }
 
@@ -57,23 +53,16 @@ export class ApiV1Service extends BaseApiService {
   ): Promise<void> {
     const sessionDurationSeconds = rememberMe ? ONE_WEEK_SECONDS : 0;
 
-    const response = await requestObject<DataPackage>(
-      ENDPOINTS.REQUEST_ACCESS,
-      HTTP.PUT,
-      {
-        IDT: userName,
-        Data: passwordAuthHash,
-        SessionDurationSeconds: sessionDurationSeconds,
-      }
-    );
+    const response = await requestObject<DataPackage>(ENDPOINTS.REQUEST_ACCESS, HTTP.PUT, {
+      IDT: userName,
+      Data: passwordAuthHash,
+      SessionDurationSeconds: sessionDurationSeconds,
+    });
     const sessionToken = response.Data;
 
     const wrappedPrivateKey = await this.getWrappedPrivateKey(sessionToken);
 
-    const { rsaEncKey, rsaSigKey } = await unwrapPrivateKey(
-      password,
-      wrappedPrivateKey
-    );
+    const { rsaEncKey, rsaSigKey } = await unwrapPrivateKey(password, wrappedPrivateKey);
 
     const { setUserData } = useStore.getState();
     await setUserData(
@@ -88,14 +77,10 @@ export class ApiV1Service extends BaseApiService {
   }
 
   async getWrappedPrivateKey(sessionToken: string) {
-    const response = await requestObject<DataPackage>(
-      ENDPOINTS.PRIVATE_KEY,
-      HTTP.PUT,
-      {
-        IDT: sessionToken,
-        Data: 'unused',
-      }
-    );
+    const response = await requestObject<DataPackage>(ENDPOINTS.PRIVATE_KEY, HTTP.PUT, {
+      IDT: sessionToken,
+      Data: 'unused',
+    });
     return response.Data;
   }
 
@@ -152,10 +137,7 @@ export class ApiV1Service extends BaseApiService {
     const { userData } = useStore.getState();
 
     const timestamp = Date.now();
-    const signature = await sign(
-      userData!.rsaSigKey,
-      `${timestamp}:${command}`
-    );
+    const signature = await sign(userData!.rsaSigKey, `${timestamp}:${command}`);
 
     return requestObject(ENDPOINTS.COMMAND, HTTP.POST, {
       IDT: userData!.sessionToken,
@@ -168,14 +150,10 @@ export class ApiV1Service extends BaseApiService {
   async getLocations(): Promise<Location[]> {
     const { userData } = useStore.getState();
 
-    const response = await requestObject<string[]>(
-      ENDPOINTS.LOCATIONS,
-      HTTP.POST,
-      {
-        IDT: userData!.sessionToken,
-        Data: '',
-      }
-    );
+    const response = await requestObject<string[]>(ENDPOINTS.LOCATIONS, HTTP.POST, {
+      IDT: userData!.sessionToken,
+      Data: '',
+    });
 
     const encryptedLocations = response.map((jsonStr) => {
       const parsed = JSON.parse(jsonStr) as DataPackage;
@@ -195,16 +173,12 @@ export class ApiV1Service extends BaseApiService {
   async getPictures(): Promise<string[]> {
     const { userData } = useStore.getState();
 
-    const encryptedPictures = await requestObject<string[]>(
-      ENDPOINTS.PICTURES,
-      HTTP.POST,
-      { IDT: userData!.sessionToken }
-    );
+    const encryptedPictures = await requestObject<string[]>(ENDPOINTS.PICTURES, HTTP.POST, {
+      IDT: userData!.sessionToken,
+    });
 
     const decryptedPictures = await Promise.all(
-      encryptedPictures.map((encryptedPic) =>
-        decryptData(userData!.rsaEncKey, encryptedPic)
-      )
+      encryptedPictures.map((encryptedPic) => decryptData(userData!.rsaEncKey, encryptedPic))
     );
 
     return decryptedPictures;

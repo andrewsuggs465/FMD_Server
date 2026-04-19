@@ -1,24 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import {
-  Download,
-  ExternalLink,
-  ImageMinus,
-  MapPinMinus,
-  Shield,
-  Trash2,
-} from 'lucide-react';
+import { Download, ExternalLink, ImageMinus, MapPinMinus, Shield, Trash2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { toast } from 'sonner';
 import { apiService } from '@/lib/apiService';
 import { useStore, logout, type UnitSystem } from '@/lib/store';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Button } from '@/components/ui/button';
@@ -35,12 +23,9 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
   const { userData, units } = useStore();
   const { t } = useTranslation(['settings', 'login']);
 
-  const [showDeleteLocationsConfirm, setShowDeleteLocationsConfirm] =
-    useState(false);
-  const [showDeletePicturesConfirm, setShowDeletePicturesConfirm] =
-    useState(false);
-  const [showDeleteAccountConfirm, setShowDeleteAccountConfirm] =
-    useState(false);
+  const [showDeleteLocationsConfirm, setShowDeleteLocationsConfirm] = useState(false);
+  const [showDeletePicturesConfirm, setShowDeletePicturesConfirm] = useState(false);
+  const [showDeleteAccountConfirm, setShowDeleteAccountConfirm] = useState(false);
 
   const [showExportLoading, setShowExportLoading] = useState(false);
 
@@ -123,16 +108,12 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 
           <TabsContent value="settings" className="space-y-6">
             <div>
-              <h3 className="text-fmd-green mb-3 font-semibold">
-                {t('theme')}
-              </h3>
+              <h3 className="text-fmd-green mb-3 font-semibold">{t('theme')}</h3>
               <ThemeToggle />
             </div>
 
             <div>
-              <h3 className="text-fmd-green mb-3 font-semibold">
-                {t('units')}
-              </h3>
+              <h3 className="text-fmd-green mb-3 font-semibold">{t('units')}</h3>
               <ToggleGroup
                 type="single"
                 value={units}
@@ -140,26 +121,18 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
                   value && useStore.setState({ units: value as UnitSystem })
                 }
               >
-                <ToggleGroupItem value="metric">
-                  {t('units_metric')}
-                </ToggleGroupItem>
-                <ToggleGroupItem value="imperial">
-                  {t('units_imperial')}
-                </ToggleGroupItem>
+                <ToggleGroupItem value="metric">{t('units_metric')}</ToggleGroupItem>
+                <ToggleGroupItem value="imperial">{t('units_imperial')}</ToggleGroupItem>
               </ToggleGroup>
             </div>
 
             <div>
-              <h3 className="text-fmd-green mb-3 font-semibold">
-                {t('language.title')}
-              </h3>
+              <h3 className="text-fmd-green mb-3 font-semibold">{t('language.title')}</h3>
               <LanguageNativeSelect />
             </div>
 
             <div>
-              <h3 className="text-fmd-green mb-3 font-semibold">
-                {t('account')}
-              </h3>
+              <h3 className="text-fmd-green mb-3 font-semibold">{t('account')}</h3>
               <div className="flex flex-wrap gap-3 mb-3">
                 <Button variant="secondary" onClick={() => void handleExport()}>
                   <Download className="h-4 w-4" />
@@ -168,26 +141,17 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
               </div>
 
               <div className="flex flex-wrap gap-3">
-                <Button
-                  variant="destructive"
-                  onClick={() => setShowDeleteLocationsConfirm(true)}
-                >
+                <Button variant="destructive" onClick={() => setShowDeleteLocationsConfirm(true)}>
                   <MapPinMinus className="h-4 w-4" />
                   {t('delete_locations.button')}
                 </Button>
 
-                <Button
-                  variant="destructive"
-                  onClick={() => setShowDeletePicturesConfirm(true)}
-                >
+                <Button variant="destructive" onClick={() => setShowDeletePicturesConfirm(true)}>
                   <ImageMinus className="h-4 w-4" />
                   {t('delete_pictures.button')}
                 </Button>
 
-                <Button
-                  variant="destructive"
-                  onClick={() => setShowDeleteAccountConfirm(true)}
-                >
+                <Button variant="destructive" onClick={() => setShowDeleteAccountConfirm(true)}>
                   <Trash2 className="h-4 w-4" />
                   {t('delete_account')}
                 </Button>
@@ -201,9 +165,7 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
           >
             <div>
               <h3 className="text-fmd-green font-semibold">FMD Server</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {t('about_text')}
-              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('about_text')}</p>
             </div>
 
             <div>
@@ -251,21 +213,14 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
                 rel="noopener noreferrer"
                 className="mt-2 inline-block"
               >
-                <img
-                  src="./fdroid-badge.png"
-                  alt="Get it on F-Droid"
-                  className="h-16 w-auto"
-                />
+                <img src="./fdroid-badge.png" alt="Get it on F-Droid" className="h-16 w-auto" />
               </a>
             </div>
           </TabsContent>
         </Tabs>
       </DialogContent>
 
-      <LoadingModal
-        isOpen={showExportLoading}
-        message={t('export_data_loading_message')}
-      />
+      <LoadingModal isOpen={showExportLoading} message={t('export_data_loading_message')} />
 
       <ConfirmModal
         isOpen={showDeleteLocationsConfirm}
@@ -281,9 +236,7 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
               setShowDeleteLocationsConfirm(false);
               toast.info(t('delete_locations.success'));
             } catch (error) {
-              toast.error(
-                error instanceof Error ? error.message : 'Delete failed'
-              );
+              toast.error(error instanceof Error ? error.message : 'Delete failed');
             }
           })();
         }}
@@ -306,9 +259,7 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
               setShowDeletePicturesConfirm(false);
               toast.info(t('delete_pictures.success'));
             } catch (error) {
-              toast.error(
-                error instanceof Error ? error.message : 'Delete failed'
-              );
+              toast.error(error instanceof Error ? error.message : 'Delete failed');
             }
           })();
         }}
@@ -330,9 +281,7 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
               setShowDeleteAccountConfirm(false);
               onClose();
             } catch (error) {
-              toast.error(
-                error instanceof Error ? error.message : 'Delete failed'
-              );
+              toast.error(error instanceof Error ? error.message : 'Delete failed');
             }
           })();
         }}

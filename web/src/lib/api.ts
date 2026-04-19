@@ -46,11 +46,7 @@ export abstract class BaseApiService {
   abstract getTileServerUrl(): Promise<string>;
 }
 
-export const requestObject = async <T>(
-  endpoint: string,
-  method: string,
-  body: object
-) => {
+export const requestObject = async <T>(endpoint: string, method: string, body: object) => {
   const response = await fetch(endpoint, {
     method,
     headers: JSON_HEADER,

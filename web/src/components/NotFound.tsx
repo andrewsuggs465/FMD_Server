@@ -7,9 +7,7 @@ const NotFound = () => (
       <div className="mb-4">
         <FileQuestion className="text-fmd-green mx-auto h-12 w-12" />
       </div>
-      <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
-        Page not found
-      </h2>
+      <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">Page not found</h2>
       <p className="mb-6 text-gray-600 dark:text-gray-400">
         The page you&apos;re looking for doesn&apos;t exist.
       </p>

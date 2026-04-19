@@ -18,9 +18,7 @@ const Home = () => {
   const [photosOpen, setPhotosOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [lastLocateTime, setLastLocateTime] = useState<number | null>(null);
-  const [lastLocationsFetchedTime, setLastLocationsFetchedTime] = useState<
-    number | null
-  >(null);
+  const [lastLocationsFetchedTime, setLastLocationsFetchedTime] = useState<number | null>(null);
 
   const fetchLocations = async (showLoading = true) => {
     if (!userData) return;
@@ -41,8 +39,7 @@ const Home = () => {
       setLastLocationsFetchedTime(Date.now());
       useStore.setState({ locations: decryptedLocations });
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Failed to fetch locations';
+      const message = error instanceof Error ? error.message : 'Failed to fetch locations';
       toast.error(message || 'An unknown error occurred');
     } finally {
       if (showLoading) useStore.setState({ isLocationsLoading: false });
@@ -145,10 +142,7 @@ const Home = () => {
 
       <PhotosModal isOpen={photosOpen} onClose={() => setPhotosOpen(false)} />
 
-      <SettingsModal
-        isOpen={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-      />
+      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </>
   );
 };

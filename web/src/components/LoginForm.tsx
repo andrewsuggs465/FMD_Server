@@ -37,15 +37,11 @@ export const LoginForm = () => {
   }, []);
 
   // Hash the password on a Web Worker background thread
-  const hashPasswordInWorker = (
-    password: string,
-    salt: string
-  ): Promise<string> =>
+  const hashPasswordInWorker = (password: string, salt: string): Promise<string> =>
     new Promise((resolve, reject) => {
-      const worker = new Worker(
-        new URL('../workers/passwordHashing.ts', import.meta.url),
-        { type: 'module' }
-      );
+      const worker = new Worker(new URL('../workers/passwordHashing.ts', import.meta.url), {
+        type: 'module',
+      });
 
       worker.onmessage = (ev) => {
         resolve(ev.data as string);
@@ -98,9 +94,7 @@ export const LoginForm = () => {
 
       await apiService.login(fmdId, password, passwordHash, rememberMe);
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : t('errors:login_failed')
-      );
+      toast.error(error instanceof Error ? error.message : t('errors:login_failed'));
     } finally {
       setLoading(false);
     }
@@ -114,9 +108,7 @@ export const LoginForm = () => {
 
       <div className="flex flex-1 flex-col items-center justify-center py-8">
         <div className="dark:border-fmd-dark-border dark:bg-fmd-dark w-full max-w-md rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
-          <h1 className="text-fmd-green mb-6 text-center text-2xl font-bold">
-            FMD Server
-          </h1>
+          <h1 className="text-fmd-green mb-6 text-center text-2xl font-bold">FMD Server</h1>
 
           <p className="mb-2 text-center text-sm text-gray-700 dark:text-gray-300">
             {t('subtitle')}
@@ -157,12 +149,7 @@ export const LoginForm = () => {
               onCheckedChange={(checked) => setRememberMe(checked === true)}
             />
 
-            <Button
-              type="submit"
-              disabled={loading}
-              size="lg"
-              className="w-full text-lg"
-            >
+            <Button type="submit" disabled={loading} size="lg" className="w-full text-lg">
               {loading ? t('logging_in') : t('log_in')}
             </Button>
           </form>

@@ -15,8 +15,7 @@
   --color-fmd-map-primary: #3388ff;
   --color-fmd-map-accent: #e5528c;
 
-  --font-family-sans:
-    'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+  --font-family-sans: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
 }
 
 @layer base {

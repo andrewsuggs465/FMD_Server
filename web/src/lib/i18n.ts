@@ -19,9 +19,7 @@ export const SUPPORTED_LANGUAGES_PAIRS = [
   { code: 'zh-Hant', label: '中文（繁體）' }, // Chinese Traditional
 ] as const;
 
-export const SUPPORTED_LANGUAGES = SUPPORTED_LANGUAGES_PAIRS.flatMap(
-  (ele) => ele.code
-);
+export const SUPPORTED_LANGUAGES = SUPPORTED_LANGUAGES_PAIRS.flatMap((ele) => ele.code);
 
 export type Language = (typeof SUPPORTED_LANGUAGES)[number];
 

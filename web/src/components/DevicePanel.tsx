@@ -70,10 +70,7 @@ interface ActionData {
   variant?: 'default' | 'destructive'; // same as ActionItemProps
 }
 
-export const DevicePanel = ({
-  onLocateCommand,
-  onViewPhotos,
-}: DevicePanelProps) => {
+export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps) => {
   const {
     userData,
     locations,
@@ -105,10 +102,7 @@ export const DevicePanel = ({
     void fetchPushUrl();
   }, [userData]);
 
-  const executeCommand = async (
-    command: string,
-    baseCommand: string | null = null
-  ) => {
+  const executeCommand = async (command: string, baseCommand: string | null = null) => {
     if (!userData) return;
 
     setLoading(true);
@@ -125,9 +119,7 @@ export const DevicePanel = ({
       const msg = tCommands(`success.${baseCommand?.replace(' ', '_')}`);
       toast.success(msg);
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : tDashboard('command_failed')
-      );
+      toast.error(error instanceof Error ? error.message : tDashboard('command_failed'));
     } finally {
       setLoading(false);
     }
@@ -321,10 +313,7 @@ export const DevicePanel = ({
                   className="flex-1 font-semibold"
                   onClick={() =>
                     useStore.setState({
-                      currentLocationIndex: Math.max(
-                        0,
-                        currentLocationIndex - 1
-                      ),
+                      currentLocationIndex: Math.max(0, currentLocationIndex - 1),
                     })
                   }
                   disabled={currentLocationIndex === 0}

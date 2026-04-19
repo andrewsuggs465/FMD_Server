@@ -1,9 +1,7 @@
 export const useThemeColors = () => {
   const getCssVariable = (name: string) => {
     if (typeof window === 'undefined') return '';
-    return getComputedStyle(document.documentElement)
-      .getPropertyValue(name)
-      .trim();
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   };
 
   return {

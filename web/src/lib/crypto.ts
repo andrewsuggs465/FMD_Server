@@ -23,9 +23,7 @@ const base64Decode = (encodedString: string) => {
 };
 
 const base64Encode = (bytesToEncode: Uint8Array) => {
-  const binString = Array.from(bytesToEncode, (byte) =>
-    String.fromCodePoint(byte)
-  ).join('');
+  const binString = Array.from(bytesToEncode, (byte) => String.fromCodePoint(byte)).join('');
   return btoa(binString);
 };
 
@@ -69,13 +67,8 @@ const hashPasswordForKeyWrap = (password: string, salt: Uint8Array) => {
 export const unwrapPrivateKey = async (password: string, keyData: string) => {
   const concatBytes = base64Decode(keyData);
   const saltBytes = concatBytes.slice(0, ARGON2_SALT_LENGTH);
-  const ivBytes = concatBytes.slice(
-    ARGON2_SALT_LENGTH,
-    ARGON2_SALT_LENGTH + AES_GCM_IV_SIZE_BYTES
-  );
-  const wrappedKeyBytes = concatBytes.slice(
-    ARGON2_SALT_LENGTH + AES_GCM_IV_SIZE_BYTES
-  );
+  const ivBytes = concatBytes.slice(ARGON2_SALT_LENGTH, ARGON2_SALT_LENGTH + AES_GCM_IV_SIZE_BYTES);
+  const wrappedKeyBytes = concatBytes.slice(ARGON2_SALT_LENGTH + AES_GCM_IV_SIZE_BYTES);
 
   const rawAesKey = hashPasswordForKeyWrap(password, saltBytes);
 
@@ -128,23 +121,15 @@ export const sign = async (rsaCryptoKey: CryptoKey, msg: string) => {
 
 // Section: Symmetric crypto
 
-export const decryptData = async (
-  rsaCryptoKey: CryptoKey,
-  encryptedBase64: string
-) => {
+export const decryptData = async (rsaCryptoKey: CryptoKey, encryptedBase64: string) => {
   try {
     // Hybrid encryption format:
     // [384 bytes: RSA-encrypted AES key][12 bytes: IV][remaining: AES-GCM encrypted data]
     const allBytes = base64Decode(encryptedBase64);
 
     const encryptedAesKeyBytes = allBytes.slice(0, RSA_KEY_SIZE_BYTES);
-    const ivBytes = allBytes.slice(
-      RSA_KEY_SIZE_BYTES,
-      RSA_KEY_SIZE_BYTES + AES_GCM_IV_SIZE_BYTES
-    );
-    const encryptedDataBytes = allBytes.slice(
-      RSA_KEY_SIZE_BYTES + AES_GCM_IV_SIZE_BYTES
-    );
+    const ivBytes = allBytes.slice(RSA_KEY_SIZE_BYTES, RSA_KEY_SIZE_BYTES + AES_GCM_IV_SIZE_BYTES);
+    const encryptedDataBytes = allBytes.slice(RSA_KEY_SIZE_BYTES + AES_GCM_IV_SIZE_BYTES);
 
     const aesKeyBytes = await crypto.subtle.decrypt(
       { name: 'RSA-OAEP' },
@@ -152,13 +137,9 @@ export const decryptData = async (
       encryptedAesKeyBytes
     );
 
-    const aesKey = await crypto.subtle.importKey(
-      'raw',
-      aesKeyBytes,
-      { name: 'AES-GCM' },
-      false,
-      ['decrypt']
-    );
+    const aesKey = await crypto.subtle.importKey('raw', aesKeyBytes, { name: 'AES-GCM' }, false, [
+      'decrypt',
+    ]);
 
     const decryptedBytes = await crypto.subtle.decrypt(
       { name: 'AES-GCM', iv: ivBytes },

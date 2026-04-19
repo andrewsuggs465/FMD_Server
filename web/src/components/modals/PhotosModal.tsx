@@ -27,9 +27,7 @@ export const PhotosModal = ({ isOpen, onClose }: PhotosModalProps) => {
           useStore.setState({ pictures: pics });
           setSelectedIndex(pics.length - 1);
         } catch (err) {
-          toast.error(
-            err instanceof Error ? err.message : 'Failed to load photos'
-          );
+          toast.error(err instanceof Error ? err.message : 'Failed to load photos');
         } finally {
           useStore.setState({ isPicturesLoading: false });
         }
@@ -62,9 +60,7 @@ export const PhotosModal = ({ isOpen, onClose }: PhotosModalProps) => {
                   variant="outline"
                   size="sm"
                   className="font-semibold"
-                  onClick={() =>
-                    setSelectedIndex(Math.max(0, selectedIndex - 1))
-                  }
+                  onClick={() => setSelectedIndex(Math.max(0, selectedIndex - 1))}
                   disabled={selectedIndex === 0}
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -79,11 +75,7 @@ export const PhotosModal = ({ isOpen, onClose }: PhotosModalProps) => {
                   variant="outline"
                   size="sm"
                   className="font-semibold"
-                  onClick={() =>
-                    setSelectedIndex(
-                      Math.min(pictures.length - 1, selectedIndex + 1)
-                    )
-                  }
+                  onClick={() => setSelectedIndex(Math.min(pictures.length - 1, selectedIndex + 1))}
                   disabled={selectedIndex === pictures.length - 1}
                 >
                   {t('dashboard:location.newer')}

@@ -11,11 +11,7 @@ interface FactoryResetModalProps {
   executeCommand: (command: string, baseCommand: string) => void;
 }
 
-export const FactoryResetModal = ({
-  isOpen,
-  onClose,
-  executeCommand,
-}: FactoryResetModalProps) => {
+export const FactoryResetModal = ({ isOpen, onClose, executeCommand }: FactoryResetModalProps) => {
   const { t } = useTranslation('modals');
   const [deletePassword, setDeletePassword] = useState('');
 

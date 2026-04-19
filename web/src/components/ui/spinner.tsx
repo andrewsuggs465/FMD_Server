@@ -13,12 +13,7 @@ const sizeMap = {
 };
 
 function Spinner({ className, size = 'md' }: SpinnerProps) {
-  return (
-    <Loader2
-      className={cn('animate-spin', sizeMap[size], className)}
-      aria-label="Loading"
-    />
-  );
+  return <Loader2 className={cn('animate-spin', sizeMap[size], className)} aria-label="Loading" />;
 }
 
 export { Spinner };
