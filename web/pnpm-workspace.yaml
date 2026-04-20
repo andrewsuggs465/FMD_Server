@@ -1,2 +1,14 @@
-onlyBuiltDependencies:
-  - esbuild
+# https://docusaurus.io/blog/releases/3.10#secure-your-site
+# https://pnpm.io/supply-chain-security
+
+minimumReleaseAge: 10080 # 1 week in minutes
+
+blockExoticSubdeps: true
+
+strictDepBuilds: true
+allowBuilds:
+  esbuild: true
+
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  - 'semver@6.3.1'
