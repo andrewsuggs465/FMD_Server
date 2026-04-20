@@ -30,7 +30,7 @@ export type Language = (typeof SUPPORTED_LANGUAGES)[number];
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
 const translationModules = import.meta.glob('@/locales/*/*.json', {
   eager: true,
-});
+}) as Record<string, Record<string, string>>;
 
 const resources = {} as Record<Language, Record<string, string>>;
 
