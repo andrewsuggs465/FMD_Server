@@ -17,6 +17,7 @@ description: >
   The app can then upload its location at regular intervals.
   You can also push commands to the FMD app on your device from FMD Server, e.g. to make your device ring.
 icon: snap/gui/icon.png
+
 base: core24
 grade: stable
 confinement: strict
@@ -41,9 +42,9 @@ parts:
       craftctl default
       cp "${CRAFT_PART_INSTALL}/fmd-server-${CRAFT_ARCH_BUILD_FOR%%hf}" "${CRAFT_PART_INSTALL}/fmd-server"
       chmod +x "${CRAFT_PART_INSTALL}/fmd-server"
-      chmod 644 "${CRAFT_PART_INSTALL}/config.example.yml"
       cp "${CRAFT_PART_INSTALL}/fmd-server-ctl-${CRAFT_ARCH_BUILD_FOR%%hf}" "${CRAFT_PART_INSTALL}/fmd-server-ctl"
       chmod +x "${CRAFT_PART_INSTALL}/fmd-server-ctl"
+      chmod 644 "${CRAFT_PART_INSTALL}/config.example.yml"
     stage:
       - bin/fmd-server
       - bin/fmd-server-ctl
@@ -75,4 +76,3 @@ apps:
       - network-bind
   fmd-server-ctl:
     command: bin/fmd-server-ctl.sh
-    

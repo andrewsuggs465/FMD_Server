@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-FMD_DATABASEDIR="${SNAP_COMMON}/db"
+# Needed because config.yaml does not have this path set
+export FMD_DATABASEDIR="${SNAP_COMMON}/db"
 
-# Start FMD Server
+# Run the tool
 exec "${SNAP}/bin/fmd-server-ctl" "$@"
