@@ -1,4 +1,4 @@
-import { ChevronRight, type LucideIcon } from 'lucide-react';
+import { type LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 
@@ -56,7 +56,6 @@ export const ActionItem = ({
           </div>
         )}
       </div>
-      <ChevronRight className="h-5 w-5 text-gray-400" />
     </Button>
   );
 };
