@@ -1,0 +1,11 @@
+{
+  "factory_reset": {
+    "title": "Visszaállítja a készüléket a gyári beállításokra?",
+    "message": "Ezzel az eszközről véglegesen törlődnek az összes adatok, és az eszköz gyári beállításaira áll vissza. Ez a művelet visszafordíthatatlan.",
+    "confirm": "Gyári beállítások visszaállítása",
+    "password_placeholder": "Írja be a törlési jelszavát"
+  },
+  "lock": {
+    "message_placeholder": "Írja be az üzenetet"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "locate_all": {
+    "title": "Keresés: Mind",
+    "description": "Helyadatok lekérése az összes helyszolgáltatótól"
+  },
+  "locate_fused": {
+    "title": "Lokalizáció: egyesített",
+    "description": "Helymeghatározás hálózaton/GPS-en keresztül"
+  },
+  "locate_gps": {
+    "title": "Lokalizáció: GPS"
+  },
+  "ring": {
+    "description": "Játsszon le egy hangos hangjelzést az eszközön"
+  }
+}

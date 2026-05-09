@@ -1,0 +1,10 @@
+{
+  "loading": "Betöltés…",
+  "no_devices": "Nincs eszköz",
+  "last_location": "Utolsó hely",
+  "updated": "Frissített",
+  "time": "Idő",
+  "location": {
+    "recorded_at": "Felvett"
+  }
+}
