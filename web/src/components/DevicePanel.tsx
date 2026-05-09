@@ -254,7 +254,7 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
     title: tCommands('location_service_group.title'),
     description: tCommands('location_service_group.description'),
     actions: actionsLocationServices,
-  }
+  };
   const actionsBluetooth = [
     {
       icon: Bluetooth,
@@ -274,7 +274,7 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
     title: tCommands('bluetooth_group.title'),
     description: tCommands('bluetooth_group.description'),
     actions: actionsBluetooth,
-  }
+  };
   const actionsRinger = [
     {
       icon: Bell,
@@ -300,7 +300,7 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
     title: tCommands('ringer_group.title'),
     description: tCommands('ringer_group.description'),
     actions: actionsRinger,
-  }
+  };
   const actionsDnd = [
     {
       icon: BellOff,
@@ -320,7 +320,7 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
     title: tCommands('dnd_group.title'),
     description: tCommands('dnd_group.description'),
     actions: actionsDnd,
-  }
+  };
 
   const actionGroups: Array<ActionGroupData> = [
     groupLocation,
