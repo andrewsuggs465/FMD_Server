@@ -1,10 +1,10 @@
 {
   "locate_all": {
-    "title": "Lokalisieren: Alle",
+    "title": "Lokalisieren: alle",
     "description": "Ortung von allen Standortanbietern"
   },
   "locate_fused": {
-    "title": "Lokalisieren: Zusammengefasst",
+    "title": "Lokalisieren: zusammengefasst",
     "description": "Ortung von Netzwerk/GPS"
   },
   "locate_gps": {
@@ -72,10 +72,10 @@
     "description": "Klingelmodus auf Lautlos einstellen"
   },
   "dnd_on": {
-    "title": "\"Nicht stören\"-Modus aktivieren"
+    "title": "„Nicht stören“-Modus aktivieren"
   },
   "dnd_off": {
-    "title": "\"Nicht stören\"-Modus deaktivieren"
+    "title": "„Nicht stören“-Modus deaktivieren"
   },
   "success": {
     "locate_all": "Ortung wird angefordert…",
@@ -96,7 +96,7 @@
     "ringermode_normal": "Klingelton wird auf normal gestellt…",
     "ringermode_vibrate": "Klingelton wird auf Vibration gestellt…",
     "ringermode_silent": "Klingelton wird auf lautlos gestellt…",
-    "nodisturb_on": "\"Nicht stören\"-Modus wird aktiviert…",
-    "nodisturb_off": "\"Nicht stören\"-Modus wird deaktiviert…"
+    "nodisturb_on": "„Nicht stören“-Modus wird aktiviert…",
+    "nodisturb_off": "„Nicht stören“-Modus wird deaktiviert…"
   }
 }
