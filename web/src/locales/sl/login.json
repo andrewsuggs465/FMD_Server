@@ -10,5 +10,6 @@
   "log_in": "Prijava",
   "logging_in": "Prijavljanje…",
   "project_website": "Spletna stran projekta",
-  "source_code": "Izvorna koda"
+  "source_code": "Izvorna koda",
+  "login_slow": "Zdi se, da je zgoščevanje gesel počasno. To se običajno zgodi, ko je v vašem brskalniku onemogočen JavaScript JIT. Omogočite JIT ali pa bodite potrpežljivi in počakajte do 5 minut."
 }

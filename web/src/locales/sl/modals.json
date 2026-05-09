@@ -20,8 +20,8 @@
     "of": "od"
   },
   "webcrypto_warning": {
-    "title": "WebCrypto API ni na voljo",
-    "message": "FMD strežnik ne bo deloval, ker WebCrypto API ni na voljo.",
+    "title": "Web Cryptography API ni na voljo",
+    "message": "FMD strežnik ne bo deloval, ker Web Cryptography API ni na voljo.",
     "detail": "To je najverjetneje zato, ker to spletno mesto obiskujete prek nezaščitenega HTTP-ja. Uporabite HTTPS. Če imate lastno gostovanje, preberite",
     "link_text": "navodila za namestitev"
   },

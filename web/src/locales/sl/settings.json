@@ -27,6 +27,18 @@
   "units": "Enote",
   "units_metric": "Metrične",
   "units_imperial": "Imperialne",
-  "account": "Račun",
-  "about_text": "Strežnik za komunikacijo z aplikacijo FMD za Android, za lociranje in upravljanje vaših naprav."
+  "account": "Račun in podatki",
+  "about_text": "Strežnik za komunikacijo z aplikacijo FMD za Android, za lociranje in upravljanje vaših naprav.",
+  "delete_locations": {
+    "button": "Izbriši lokacije",
+    "title": "Izbrišem vse lokacije?",
+    "description": "Vse lokacije bodo trajno izbrisane s strežnika. Tega ni mogoče razveljaviti.",
+    "success": "Lokacije so bile uspešno izbrisane."
+  },
+  "delete_pictures": {
+    "button": "Izbriši fotografije",
+    "title": "Izbrišem vse fotografije?",
+    "description": "Vse fotografije bodo trajno izbrisane s strežnika. Tega ni mogoče razveljaviti.",
+    "success": "Fotografije so bile uspešno izbrisane."
+  }
 }
