@@ -17,7 +17,6 @@ description: >
   The app can then upload its location at regular intervals.
   You can also push commands to the FMD app on your device from FMD Server, e.g. to make your device ring.
 icon: snap/gui/icon.png
-
 base: core24
 grade: stable
 confinement: strict
@@ -30,21 +29,24 @@ platforms:
     build-on: [amd64]
 
 parts:
-
   # Get the general FMD Server things from the pre-compiled release.
   # The `%%hf` suffix is to remove the suffix to map "armhf" (Snap-style) to "arm" (FMD-style).
-  fmd-server:
+  fmd-server-bin:
     plugin: dump
     source: https://packages.fmd-foss.org/server/fmd-server-v${SNAPCRAFT_PROJECT_VERSION}.zip
     organize:
       fmd-server: bin/fmd-server
+      fmd-server-ctl: bin/fmd-server-ctl
     override-build: |
       craftctl default
       cp "${CRAFT_PART_INSTALL}/fmd-server-${CRAFT_ARCH_BUILD_FOR%%hf}" "${CRAFT_PART_INSTALL}/fmd-server"
       chmod +x "${CRAFT_PART_INSTALL}/fmd-server"
       chmod 644 "${CRAFT_PART_INSTALL}/config.example.yml"
+      cp "${CRAFT_PART_INSTALL}/fmd-server-ctl-${CRAFT_ARCH_BUILD_FOR%%hf}" "${CRAFT_PART_INSTALL}/fmd-server-ctl"
+      chmod +x "${CRAFT_PART_INSTALL}/fmd-server-ctl"
     stage:
       - bin/fmd-server
+      - bin/fmd-server-ctl
       - config.example.yml
 
   # Get the Snap-specific things from the current git repo state.
@@ -68,3 +70,5 @@ apps:
     plugs:
       - network
       - network-bind
+  fmd-server-ctl:
+    command: bin/fmd-server-ctl
