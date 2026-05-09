@@ -27,12 +27,18 @@ RUN useradd --no-create-home --uid 1000 fmd-server
 # Note that the directories must be executable (for file listing, etc.)
 
 ARG BIN_FILE=/opt/fmd-server
+ARG CTL_FILE=/opt/fmd-server-ctl
 ARG DB_DIR=/var/lib/fmd-server/db
 
 COPY --from=builder \
     --chown=root:root \
     --chmod=755 \
     "/tmp/fmd/fmd-server-${TARGETARCH}" "$BIN_FILE"
+
+COPY --from=builder \
+    --chown=root:root \
+    --chmod=755 \
+    "/tmp/fmd/fmd-server-ctl-${TARGETARCH}" "$CTL_FILE"
 
 RUN mkdir -p "$DB_DIR" && \
     chown -R fmd-server:fmd-server "$DB_DIR" && \

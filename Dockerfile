@@ -24,6 +24,7 @@ RUN cd web && \
     cd ..
 
 RUN go build -o /tmp/fmd main.go
+RUN go build -o /tmp/fmd-server-ctl ./ctl
 
 
 FROM debian:13-slim
@@ -39,12 +40,16 @@ RUN useradd --no-create-home --uid 1000 fmd-server
 # Note that the directories must be executable (for file listing, etc.)
 
 ARG BIN_FILE=/opt/fmd-server
+ARG CTL_FILE=/opt/fmd-server-ctl
 ARG DB_DIR=/var/lib/fmd-server/db
 
 COPY --from=builder /tmp/fmd "$BIN_FILE"
+COPY --from=builder /tmp/fmd-server-ctl "$CTL_FILE"
 
 RUN chown fmd-server:fmd-server "$BIN_FILE" && \
     chmod 0755 "$BIN_FILE"
+RUN chown fmd-server:fmd-server "$CTL_FILE" && \
+    chmod 0755 "$CTL_FILE"
 
 RUN mkdir -p "$DB_DIR"
 
