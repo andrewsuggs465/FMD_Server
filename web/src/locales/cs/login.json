@@ -1,0 +1,15 @@
+{
+  "subtitle": "Tato platforma slouží pro vyhledávání a ovládání vašich zařízení.",
+  "setup_instruction_1": "Začněte",
+  "setup_instruction_2": "instalací aplikace FMD pro Android",
+  "setup_instruction_3": "na vaše mobilní zařízení. Poté použijte aplikaci pro registraci účtu na FMD Serveru.",
+  "username_placeholder": "Uživatelské jméno",
+  "password_placeholder": "Heslo",
+  "remember_me": "Zapamatovat si mě",
+  "log_in": "Přihlásit se",
+  "logging_in": "Přihlašování…",
+  "login_slow": "Hashování hesla se zdá být pomalé. To obvykle nastane, když máte v prohlížeči zakázaný JavaScript JIT. Buď povolte JIT, nebo buďte trpěliví a počkejte až 5 minut.",
+  "project_website": "Web projektu",
+  "source_code": "Zdrojový kód",
+  "privacy_notice": "Ochrana soukromí"
+}

@@ -1,0 +1,34 @@
+{
+  "about": "O aplikaci",
+  "title": "Nastavení",
+  "general": "Obecné",
+  "theme": "Motiv",
+  "theme_dark": "Tmavý",
+  "theme_light": "Světlý",
+  "theme_system": "Systém",
+  "units": "Jednotky",
+  "units_metric": "Metrické",
+  "units_imperial": "Imperiální",
+  "account": "Účet a data",
+  "export_data": "Exportovat data",
+  "export_data_loading_message": "Stahování dat. Tato akce může chvíli trvat, obzvláště, pokud máte hodně obrázků.",
+  "delete_locations": {
+    "button": "Smazat polohy",
+    "title": "Smazat všechny polohy?",
+    "description": "Všechny polohy budou trvale smazány ze serveru. Tato akce je nevratná.",
+    "success": "Polohy úspěšně smazány."
+  },
+  "delete_pictures": {
+    "button": "Smazat fotky",
+    "title": "Smazat všechny fotky?",
+    "description": "Všechny fotky budou trvale smazány ze serveru. Tato akce je nevratná.",
+    "success": "Fotky úspěšně smazány."
+  },
+  "delete_account": "Smazat účet",
+  "delete_account_title": "Smazat účet?",
+  "delete_account_description": "Váš účet a všechna jeho data budou trvale smazány ze serveru. Tato akce je nevratná.",
+  "language": {
+    "title": "Jazyk"
+  },
+  "about_text": "Server ke komunikaci s aplikací FMD pro Android, pro vyhledávání a ovládání vašich zařízení."
+}

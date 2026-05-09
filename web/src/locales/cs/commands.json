@@ -1,0 +1,102 @@
+{
+  "locate_all": {
+    "title": "Poloha: Vše",
+    "description": "Získat polohu od všech poskytovatelů polohy"
+  },
+  "locate_fused": {
+    "title": "Poloha: Sloučená",
+    "description": "Získat polohu ze sítě/GPS"
+  },
+  "locate_gps": {
+    "title": "Poloha: GPS",
+    "description": "Získat polohu z GPS"
+  },
+  "locate_cell": {
+    "title": "Poloha: Mobilní věže",
+    "description": "Získat polohu z okolních mobilních věcí pomocí OpenCelliD a/nebo BeaconDB"
+  },
+  "locate_last": {
+    "title": "Poloha: Poslední známá",
+    "description": "Získat poslední známou polohu (rychlé, ale může být zastaralá)"
+  },
+  "ring": {
+    "title": "Prozvonit",
+    "description": "Přehrát hlasitý zvuk na zařízení"
+  },
+  "flash": {
+    "title": "Blesk",
+    "description": "Zapnout svítilnu"
+  },
+  "lock": {
+    "title": "Uzamknout",
+    "description": "Uzamknout obrazovku zařízení"
+  },
+  "factory_reset": {
+    "title": "Tovární nastavení",
+    "description": "Vymazat všechna data a resetovat zařízení do továrního nastavení"
+  },
+  "camera_front": {
+    "title": "Přední fotoaparát",
+    "description": "Pořídit fotku předním fotoaparátem"
+  },
+  "camera_back": {
+    "title": "Zadní fotoaparát",
+    "description": "Pořídit fotku zadním fotoaparátem"
+  },
+  "view_photos": {
+    "title": "Zobrazit fotky",
+    "description": "Zobrazit fotky pořízené zařízením"
+  },
+  "gps_on": {
+    "title": "Zapnout polohové služby"
+  },
+  "gps_off": {
+    "title": "Vypnout polohové služby"
+  },
+  "bluetooth_on": {
+    "title": "Zapnout Bluetooth"
+  },
+  "bluetooth_off": {
+    "title": "Vypnout Bluetooth"
+  },
+  "ringer_normal": {
+    "title": "Vyzvánění: Normální",
+    "description": "Nastavit režim vyzvánění na normální"
+  },
+  "ringer_vibrate": {
+    "title": "Vyzvánění: Vibrace",
+    "description": "Nastavit režim vyzvánění na vibrace"
+  },
+  "ringer_silent": {
+    "title": "Vyzvánění: Tiché",
+    "description": "Nastavit režim vyzvánění na tiché"
+  },
+  "dnd_on": {
+    "title": "Zapnout režim Nerušit"
+  },
+  "dnd_off": {
+    "title": "Vypnout režim Nerušit"
+  },
+  "success": {
+    "locate_all": "Vyhledávání polohy…",
+    "locate_fused": "Vyhledávání polohy…",
+    "locate_gps": "Vyhledávání polohy…",
+    "locate_cell": "Vyhledávání polohy…",
+    "locate_last": "Vyhledávání poslední známé polohy…",
+    "ring": "Prozvánění zařízení…",
+    "flash": "Zapínání svítilny…",
+    "lock": "Uzamykání zařízení…",
+    "delete": "Spuštěn tovární reset…",
+    "camera_front": "Pořizování fotky…",
+    "camera_back": "Pořizování fotky…",
+    "bluetooth_on": "Zapínání připojení Bluetooth…",
+    "bluetooth_off": "Vypínání připojení Bluetooth…",
+    "gps_on": "Zapínání polohových služeb…",
+    "gps_off": "Vypínání polohových služeb…",
+    "ringermode_normal": "Nastavování vyzvánění na normální…",
+    "ringermode_vibrate": "Nastavování vyzvánění na vibrace…",
+    "ringermode_silent": "Nastavování vyzvánění na tiché…",
+    "nodisturb_on": "Zapínání režimu Nerušit…",
+    "nodisturb_off": "Vypínání režimu Nerušit…"
+  }
+}

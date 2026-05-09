@@ -1,0 +1,31 @@
+{
+  "factory_reset": {
+    "title": "Resetovat zařízení do továrního nastavení?",
+    "message": "Toto trvale smaže všechna data z vašeho zařízení a obnoví jej do továrního nastavení. Tato akce je nevratná.",
+    "confirm": "Tovární nastavení",
+    "password_placeholder": "Zadejte vaše heslo pro smazání",
+    "password_hint": "Heslo pro smazání je nastaveno v aplikaci FMD pro Android. Nejedná se o vaše serverové heslo.",
+    "error_empty_password": "Zadejte prosím vaše heslo pro smazání"
+  },
+  "loading": {
+    "title": "Načítání"
+  },
+  "lock": {
+    "title": "Uzamknout zařízení?",
+    "message": "Po uzamčení zařízení je pro jeho odemčení vyžadován PIN nebo heslo zařízení. Biometrické odemčení nebude dostupné, dokud nebude zadán PIN nebo heslo.",
+    "confirm": "Uzamknout",
+    "message_placeholder": "Zadejte zprávu",
+    "message_hint": "Zadejte zprávu k zobrazení na uzamčené obrazovce. Pokud toto ponecháte prázdné, bude zobrazena zpráva, která je nastavena v aplikaci FMD pro Android."
+  },
+  "pictures": {
+    "title": "Fotky",
+    "empty": "Nejsou dostupné žádné fotky",
+    "of": "z"
+  },
+  "webcrypto_warning": {
+    "title": "Web Cryptography API není dostupné",
+    "message": "FMD Server nebude fungovat, protože rozhraní Web Cryptography API není dostupné.",
+    "detail": "Nejpravděpodobnější příčinou je, že navštěvujete tento web skrze nezabezpečené připojení HTTP. Použijte prosím HTTPS. Pokud si server hostujete sami, přečtěte si prosím",
+    "link_text": "návod k instalaci"
+  }
+}
