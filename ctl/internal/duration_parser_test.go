@@ -83,3 +83,16 @@ func TestUnknownUnit(t *testing.T) {
 		t.Errorf(`actual=%d != expected=%d`, actual, expected)
 	}
 }
+
+func TestNoUnit(t *testing.T) {
+	actual, actualErr := ParseDurationShortHand("10")
+	expected := -1
+
+	if actual != expected {
+		t.Errorf(`actual=%d != expected=%d`, actual, expected)
+	}
+
+	if actualErr != ErrUnknownUnit {
+		t.Errorf(`actual=%d != expected=%d`, actual, expected)
+	}
+}
