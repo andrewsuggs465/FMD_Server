@@ -1,10 +1,10 @@
 {
   "locate_all": {
-    "title": "Lokalisieren: alle",
+    "title": "Lokalisieren: Alle",
     "description": "Ortung von allen Standortanbietern"
   },
   "locate_fused": {
-    "title": "Lokalisieren: zusammengefasst",
+    "title": "Lokalisieren: Zusammengefasst",
     "description": "Ortung von Netzwerk/GPS"
   },
   "locate_gps": {

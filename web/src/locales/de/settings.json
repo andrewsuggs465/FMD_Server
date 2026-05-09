@@ -9,7 +9,7 @@
   "units": "Einheiten",
   "units_metric": "Metrisch",
   "units_imperial": "Imperial",
-  "account": "Konto",
+  "account": "Konto & Daten",
   "export_data": "Daten exportieren",
   "export_data_loading_message": "Daten werden heruntergeladen. Dies kann etwas dauern, vor allem wenn du viele Bilder hast.",
   "delete_account": "Konto löschen",
@@ -26,5 +26,17 @@
     "sl": "Slowenisch",
     "zh-Hant": "Chinesisch (Traditionell)"
   },
-  "about_text": "Ein Server, um mit der FMD-Android-App zu kommunizieren, um deine Geräte zu orten und zu steuern."
+  "about_text": "Ein Server, um mit der FMD-Android-App zu kommunizieren, um deine Geräte zu orten und zu steuern.",
+  "delete_locations": {
+    "button": "Standorte löschen",
+    "title": "Alle Standorte löschen?",
+    "description": "Alle Standorte werden dauerhaft vom Server gelöscht. Dies kann nicht rückgängig gemacht werden.",
+    "success": "Standorte erfolgreich gelöscht."
+  },
+  "delete_pictures": {
+    "button": "Fotos löschen",
+    "title": "Alle Fotos löschen?",
+    "description": "Alle Fotos werden dauerhaft vom Server gelöscht. Dies kann nicht rückgängig gemacht werden.",
+    "success": "Fotos erfolgreich gelöscht."
+  }
 }

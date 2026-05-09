@@ -23,8 +23,8 @@
     "of": "von"
   },
   "webcrypto_warning": {
-    "title": "WebCrypto-API nicht verfügbar",
-    "message": "FMD-Server funktioniert nicht, da die WebCrypto-API nicht verfügbar ist.",
+    "title": "Web-Cryptography-API nicht verfügbar",
+    "message": "FMD Server funktioniert nicht, da die Web-Cryptography-API nicht verfügbar ist.",
     "detail": "Dies liegt wahrscheinlich daran, dass du diese Website über unsicheres HTTP aufrufst. Bitte verwende HTTPS. Falls du selber hostest, lies bitte die",
     "link_text": "Installationsanleitung"
   }
