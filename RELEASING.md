@@ -22,5 +22,6 @@ Building the package:
 Creating the release:
 
 1. Wait for the Docker image build to finish, and briefly test that the image works.
-1. Upload the Snap to the Snap store. Install it from there and test that it works.
+1. Upload the Snap to the Snap store: `snapcraft upload --release=stable fmd-server_v0.0.0_arch.snap`
+1. Install it from there and test that it works.
 1. Create a new release on Gitlab: <https://gitlab.com/fmd-foss/fmd-server/-/releases>.
