@@ -9,7 +9,7 @@
   "units": "Ühikud",
   "units_metric": "Meetermõõdustik",
   "units_imperial": "Inglise mõõdustik",
-  "account": "Kasutajakonto",
+  "account": "Kasutajakonto ja andmed",
   "language": {
     "title": "Keel",
     "en": "inglise keel",
@@ -28,5 +28,17 @@
   "delete_account": "Kustuta kasutajakonto",
   "delete_account_title": "Kas kustutame kasutajakonto?",
   "delete_account_description": "Kõik kasutajakonto andmed kustutatakse serverist jäädavalt. Seda tegevust ei saa tagasi pöörata.",
-  "about_text": "Server, mis on mõeldud FMD Androidi rakenduste haldamiseks ning seeläbi sinu seadmete juhtumiseks ja asukoha tuvastamiseks."
+  "about_text": "Server, mis on mõeldud FMD Androidi rakenduste haldamiseks ning seeläbi sinu seadmete juhtumiseks ja asukoha tuvastamiseks.",
+  "delete_locations": {
+    "button": "Kustuta asukohad",
+    "title": "Kas kustutad kõik asukohad?",
+    "description": "Kõik asukohtade andmed kustutatakse serverist jäädavalt. Seda tegevust ei saa tagasi pöörata.",
+    "success": "Asukohtade kustutamine õnnestus."
+  },
+  "delete_pictures": {
+    "button": "Kustuta fotod",
+    "title": "Kas kustutad kõik fotod?",
+    "description": "Kõik fotod kustutatakse serverist jäädavalt. Seda tegevust ei saa tagasi pöörata.",
+    "success": "Fotode kustutamine õnnestus."
+  }
 }

@@ -23,8 +23,8 @@
     "of": "/"
   },
   "webcrypto_warning": {
-    "title": "WebCrypto API pole saadaval",
-    "message": "Kuna WebCrypto API pole saadaval, siis FMD Server ei toimi.",
+    "title": "Web Cryptography API pole saadaval",
+    "message": "Kuna Web Cryptography API pole saadaval, siis FMD Server ei toimi.",
     "link_text": "paigaldusjuhendist",
     "detail": "Ilmselt on põhjuseks ebaturvalise HTTP kasutamine. Palun kasuta HTTPS-i. Kui server on sinu enda hallatud, siis lisateavet leiad"
   }
