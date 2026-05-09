@@ -52,6 +52,7 @@ for ARCH in "amd64" "arm" "arm64"; do
     # https://xnacly.me/posts/2023/go-metadata/
     echo "Compiling Go for GOOS=$GOOS GOARCH=$GOARCH..."
     go build -ldflags="-w -s -buildid=" -trimpath -o "fmd-server-$GOARCH"
+    go build -ldflags="-w -s -buildid=" -trimpath -o "fmd-server-ctl-$GOARCH" ./ctl
 done
 
 # Reproducibility: Include go version in ZIP.
@@ -81,6 +82,9 @@ TZ=utc zip -X "$ZIPNAME" \
     fmd-server-amd64 \
     fmd-server-arm \
     fmd-server-arm64 \
+    fmd-server-ctl-amd64 \
+    fmd-server-ctl-arm \
+    fmd-server-ctl-arm64 \
     $WEBFILES \
     config.example.yml \
     certs/gen_cert.sh \
