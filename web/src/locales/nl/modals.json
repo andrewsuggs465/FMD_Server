@@ -23,8 +23,8 @@
     "of": "van"
   },
   "webcrypto_warning": {
-    "title": "WebCrypto-API niet beschikbaar",
-    "message": "FMD Server zal niet werken omdat de WebCrypto-API niet beschikbaar is.",
+    "title": "Web Cryptography API niet beschikbaar",
+    "message": "FMD Server zal niet werken omdat de Web Cryptography API niet beschikbaar is.",
     "detail": "Dit komt hoogstwaarschijnlijk omdat u deze site bezoekt via onveilige HTTP. Gebruik HTTPS. Bent u zelfhosting, lees dan de",
     "link_text": "installatiegids"
   }

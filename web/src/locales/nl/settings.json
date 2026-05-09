@@ -9,7 +9,7 @@
   "units": "Eenheden",
   "units_metric": "Metrisch",
   "units_imperial": "Brits-Amerikaans",
-  "account": "Account",
+  "account": "Account & Gegevens",
   "export_data": "Gegevens exporteren",
   "export_data_loading_message": "Gegevens downloaden. Dit kan even duren, zeker wanneer het veel foto's behelst.",
   "delete_account": "Account verwijderen",
@@ -28,5 +28,17 @@
     "el": "Grieks",
     "zh-Hans": "Chinees (vereenvoudigd)"
   },
-  "about_text": "Een server om te communiceren met de FMD Android-app, om uw apparaten te lokaliseren en te besturen."
+  "about_text": "Een server om te communiceren met de FMD Android-app, om uw apparaten te lokaliseren en te besturen.",
+  "delete_locations": {
+    "button": "Locaties verwijderen",
+    "title": "Alle locaties verwijderen?",
+    "description": "Alle locaties worden definitief van de server verwijderd. Dit kan niet ongedaan worden gemaakt.",
+    "success": "Locaties met succes verwijderd."
+  },
+  "delete_pictures": {
+    "button": "Foto's verwijderen",
+    "title": "Alle foto's verwijderen?",
+    "description": "Alle foto's worden definitief van de server verwijderd. Dit kan niet ongedaan worden gemaakt.",
+    "success": "Foto's met succes verwijderd."
+  }
 }
