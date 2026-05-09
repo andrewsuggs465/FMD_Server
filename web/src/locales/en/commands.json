@@ -1,22 +1,50 @@
 {
+  "locate_group": {
+    "title": "Locate",
+    "description": "Get a location from a location provider"
+  },
+  "general_group": {
+    "title": "General",
+    "description": "Some general helpful commands"
+  },
+  "camera_group": {
+    "title": "Camera",
+    "description": "Take or view a photo"
+  },
+  "location_service_group": {
+    "title": "Location Services",
+    "description": "Enable/Disable Location Services"
+  },
+  "bluetooth_group": {
+    "title": "Bluetooth",
+    "description": "Enable/Disable Do Not Bluetooth"
+  },
+  "ringer_group": {
+    "title": "Ringer",
+    "description": "Set the ringer mode"
+  },
+  "dnd_group": {
+    "title": "Do Not Disturb",
+    "description": "Enable/Disable Do Not Disturb"
+  },
   "locate_all": {
-    "title": "Locate: All",
+    "title": "All",
     "description": "Get a location from all location providers"
   },
   "locate_fused": {
-    "title": "Locate: Fused",
+    "title": "Fused",
     "description": "Get a location from network/GPS"
   },
   "locate_gps": {
-    "title": "Locate: GPS",
+    "title": "GPS",
     "description": "Get a location from GPS"
   },
   "locate_cell": {
-    "title": "Locate: Cell",
+    "title": "Cell",
     "description": "Get a location from the surrounding cell towers with OpenCelliD and/or BeaconDB"
   },
   "locate_last": {
-    "title": "Locate: Last Known",
+    "title": "Last Known",
     "description": "Get last known location (fast, but may be outdated)"
   },
   "ring": {
@@ -60,15 +88,15 @@
     "title": "Disable Bluetooth"
   },
   "ringer_normal": {
-    "title": "Ringer: Normal",
+    "title": "Normal",
     "description": "Set ringer mode to normal"
   },
   "ringer_vibrate": {
-    "title": "Ringer: Vibrate",
+    "title": "Vibrate",
     "description": "Set ringer mode to vibrate"
   },
   "ringer_silent": {
-    "title": "Ringer: Silent",
+    "title": "Silent",
     "description": "Set ringer mode to silent"
   },
   "dnd_on": {
@@ -98,5 +126,7 @@
     "ringermode_silent": "Setting ringer to silent…",
     "nodisturb_on": "Enabling Do Not Disturb…",
     "nodisturb_off": "Disabling Do Not Disturb…"
-  }
+  },
+  "enable": "Enable",
+  "disable": "Disable"
 }

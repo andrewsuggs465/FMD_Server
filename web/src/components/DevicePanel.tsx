@@ -23,13 +23,16 @@ import {
   Bell,
   BellOff,
   Vibrate,
+  HistoryIcon,
 } from 'lucide-react';
 import { ActionItem } from '@/components/ActionItem';
+import { ActionGroup } from '@/components/ActionGroup';
 import { BatteryIndicator } from '@/components/BatteryIndicator';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { FactoryResetModal } from './modals/FactoryResetModal';
 import { LockMessageModal } from './modals/LockMessageModal';
+import { title } from 'node:process';
 
 // Across this file and the UI, commands are ordered by perceived importance.
 // If you change the order in one place, make sure to keep it aligned everywhere!
@@ -68,6 +71,13 @@ interface ActionData {
   description: string | null;
   onClick: () => void;
   variant?: 'default' | 'destructive'; // same as ActionItemProps
+}
+
+interface ActionGroupData {
+  icon: any;
+  title: string;
+  description: string | null;
+  actions: ActionData[];
 }
 
 export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps) => {
@@ -125,7 +135,7 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
     }
   };
 
-  const groupLocations = [
+  const actionsLocation = [
     {
       icon: Navigation,
       title: tCommands('locate_all.title'),
@@ -157,7 +167,15 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
       onClick: () => void executeCommand(COMMANDS.LOCATE_LAST),
     },
   ];
-  const groupGeneral = [
+
+  const groupLocation = {
+    icon: Navigation,
+    title: tCommands('locate_group.title'),
+    description: tCommands('locate_group.description'),
+    actions: actionsLocation,
+  };
+
+  const actionsGeneral = [
     {
       icon: Volume2,
       title: tCommands('ring.title'),
@@ -184,7 +202,15 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
       variant: 'destructive' as const,
     },
   ];
-  const groupPictures = [
+
+  const groupGeneral = {
+    icon: Smartphone,
+    title: tCommands('general_group.title'),
+    description: tCommands('general_group.description'),
+    actions: actionsGeneral,
+  };
+
+  const actionsPictures = [
     {
       icon: UserCircle,
       title: tCommands('camera_front.title'),
@@ -204,35 +230,55 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
       onClick: onViewPhotos,
     },
   ];
-  const groupLocationServices = [
+
+  const groupPictures = {
+    icon: Camera,
+    title: tCommands('camera_group.title'),
+    description: tCommands('camera_group.description'),
+    actions: actionsPictures,
+  };
+
+  const actionsLocationServices = [
     {
       icon: Satellite,
-      title: tCommands('gps_on.title'),
+      title: tCommands('enable'),
       description: null,
       onClick: () => void executeCommand(COMMANDS.GPS_ON),
     },
     {
       icon: Satellite,
-      title: tCommands('gps_off.title'),
+      title: tCommands('disable'),
       description: null,
       onClick: () => void executeCommand(COMMANDS.GPS_OFF),
     },
   ];
-  const groupBluetooth = [
+  const groupLocationServices = {
+    icon: Satellite,
+    title: tCommands('location_service_group.title'),
+    description: tCommands('location_service_group.description'),
+    actions: actionsLocationServices,
+  }
+  const actionsBluetooth = [
     {
       icon: Bluetooth,
-      title: tCommands('bluetooth_on.title'),
+      title: tCommands('enable'),
       description: null,
       onClick: () => void executeCommand(COMMANDS.BLUETOOTH_ON),
     },
     {
       icon: BluetoothOff,
-      title: tCommands('bluetooth_off.title'),
+      title: tCommands('disable'),
       description: null,
       onClick: () => void executeCommand(COMMANDS.BLUETOOTH_OFF),
     },
   ];
-  const groupRinger = [
+  const groupBluetooth = {
+    icon: Bluetooth,
+    title: tCommands('bluetooth_group.title'),
+    description: tCommands('bluetooth_group.description'),
+    actions: actionsBluetooth,
+  }
+  const actionsRinger = [
     {
       icon: Bell,
       title: tCommands('ringer_normal.title'),
@@ -252,28 +298,41 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
       onClick: () => void executeCommand(COMMANDS.RINGERMODE_SILENT),
     },
   ];
-  const groupDnd = [
+  const groupRinger = {
+    icon: Bell,
+    title: tCommands('ringer_group.title'),
+    description: tCommands('ringer_group.description'),
+    actions: actionsRinger,
+  }
+  const actionsDnd = [
     {
       icon: BellOff,
-      title: tCommands('dnd_on.title'),
+      title: tCommands('enable'),
       description: null,
       onClick: () => void executeCommand(COMMANDS.NODISTURB_ON),
     },
     {
       icon: Bell,
-      title: tCommands('dnd_off.title'),
+      title: tCommands('disable'),
       description: null,
       onClick: () => void executeCommand(COMMANDS.NODISTURB_OFF),
     },
   ];
-  const actionGroups: Array<Array<ActionData>> = [
-    groupLocations,
+  const groupDND = {
+    icon: BellOff,
+    title: tCommands('dnd_group.title'),
+    description: tCommands('dnd_group.description'),
+    actions: actionsLocationServices,
+  }
+
+  const actionGroups: Array<ActionGroupData> = [
+    groupLocation,
     groupGeneral,
     groupPictures,
     groupLocationServices,
     groupBluetooth,
     groupRinger,
-    groupDnd,
+    groupDND,
   ];
 
   const currentLocation = locations[currentLocationIndex];
@@ -365,17 +424,13 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
             key={groupIndex}
             className="dark:border-fmd-dark-border dark:bg-fmd-dark rounded-lg border border-gray-200 bg-white"
           >
-            {group.map((action, index) => (
-              <ActionItem
-                key={index}
-                icon={action.icon}
-                title={action.title}
-                description={action.description}
-                onClick={action.onClick}
-                disabled={loading}
-                variant={action.variant}
-              />
-            ))}
+            <ActionGroup
+              title={group.title}
+              description={group.description}
+              icon={group.icon}
+              actions={group.actions}
+              disabled={loading}
+            />
           </div>
         ))}
       </div>
