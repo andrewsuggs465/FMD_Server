@@ -23,16 +23,13 @@ import {
   Bell,
   BellOff,
   Vibrate,
-  HistoryIcon,
 } from 'lucide-react';
-import { ActionItem } from '@/components/ActionItem';
 import { ActionGroup } from '@/components/ActionGroup';
 import { BatteryIndicator } from '@/components/BatteryIndicator';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { FactoryResetModal } from './modals/FactoryResetModal';
 import { LockMessageModal } from './modals/LockMessageModal';
-import { title } from 'node:process';
 
 // Across this file and the UI, commands are ordered by perceived importance.
 // If you change the order in one place, make sure to keep it aligned everywhere!
@@ -322,7 +319,7 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
     icon: BellOff,
     title: tCommands('dnd_group.title'),
     description: tCommands('dnd_group.description'),
-    actions: actionsLocationServices,
+    actions: actionsDnd,
   }
 
   const actionGroups: Array<ActionGroupData> = [
