@@ -39,6 +39,7 @@ node_modules/
 dist/
 .env.local
 *.tsbuildinfo
+*.pnpm-store
 
 db/fmd.sqlite-wal
 db/fmd.sqlite-shm
