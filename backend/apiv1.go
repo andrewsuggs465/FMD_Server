@@ -138,7 +138,8 @@ func postLocation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	locationAsString, _ := json.MarshalIndent(request, "", " ")
+	toStore := DataPackage{Data: request.Data} // don't copy the IDT (access token)
+	locationAsString, _ := json.MarshalIndent(toStore, "", " ")
 	uio.AddLocation(user, string(locationAsString))
 	w.WriteHeader(http.StatusOK)
 }
