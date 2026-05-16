@@ -44,7 +44,7 @@ export const ConfirmModal = ({
   cancelText = cancelText ?? t('cancel');
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onCancel && onCancel()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onCancel?.()}>
       <DialogContent className="sm:max-w-md" showCloseButton={false}>
         <DialogHeader>
           <div className="flex items-center gap-3 pb-4">
