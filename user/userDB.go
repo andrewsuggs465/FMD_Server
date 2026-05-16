@@ -60,7 +60,6 @@ type DBSetting struct {
 func NewFMDDB(dbDir string) *FMDDB {
 	dbFile := filepath.Join(dbDir, "fmd.sqlite")
 
-	// Check if SQL Database exists
 	_, err := os.Stat(dbFile)
 	if os.IsNotExist(err) {
 		log.Info().Msg("no SQLite DB found, creating one")
@@ -72,11 +71,23 @@ func NewFMDDB(dbDir string) *FMDDB {
 		}
 
 		// Create file
-		_, err = os.Create(dbFile)
+		_, err = os.OpenFile(dbFile, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0660)
 		if err != nil {
 			log.Fatal().Err(err).Msg("failed to create database file")
 		}
 	}
+
+	info, err := os.Stat(dbFile)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to access database file")
+		os.Exit(1) // make nilaway happy
+	}
+
+	// Enforce that the DB file is not globally accessible
+	_ = os.Chmod(filepath.Join(dbDir, "fmd.sqlite"), info.Mode()&^0007)
+	_ = os.Chmod(filepath.Join(dbDir, "fmd.sqlite-shm"), info.Mode()&^0007)
+	_ = os.Chmod(filepath.Join(dbDir, "fmd.sqlite-wal"), info.Mode()&^0007)
+
 	return initSQLite(dbFile)
 }
 
