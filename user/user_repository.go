@@ -58,14 +58,11 @@ func (u *UserRepository) CheckAccessTokenAndGetUser(providedAccessToken string) 
 	return user, nil
 }
 
-var ErrUsernameInvalid = errors.New("the requested username must be alphanumeric")
-var ErrUsernameTooLong = errors.New("the requested username must be <= 64 characters")
+var ErrUsernameInvalid = errors.New("the requested username must be alphanumeric and <= 64 characters")
 var ErrUsernameNotAvailable = errors.New("the requested username is not available")
 
 // alphanumeric and - and _
-var IsUserIdValid = regexp.MustCompile("^[-_a-zA-Z0-9]+$").MatchString
-
-const USERNAME_MAX_LENGTH = 64
+var IsUserIdValid = regexp.MustCompile("^[-_a-zA-Z0-9]{1,64}$").MatchString
 
 func (u *UserRepository) CreateNewUser(
 	privKey string,
@@ -77,17 +74,8 @@ func (u *UserRepository) CreateNewUser(
 	id := ""
 	if requestedUsername != "" {
 		if !IsUserIdValid(requestedUsername) {
-			log.Warn().Str("userid", requestedUsername).Msg("requested username is not alphanumeric")
+			log.Warn().Str("userid", requestedUsername).Msg("requested username is not alphanumeric or too long")
 			return "", ErrUsernameInvalid
-		}
-
-		if len(requestedUsername) > USERNAME_MAX_LENGTH {
-			log.Warn().
-				Str("userid", requestedUsername).
-				Int("actualLength", len(requestedUsername)).
-				Int("maxLength", USERNAME_MAX_LENGTH).
-				Msg("requested username is too long")
-			return "", ErrUsernameTooLong
 		}
 
 		user, _ := u.UB.GetByID(requestedUsername)
