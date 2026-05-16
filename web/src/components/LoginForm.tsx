@@ -126,12 +126,14 @@ export const LoginForm = () => {
             {t('setup_instruction_3')}
           </p>
 
+          {/* https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/autocomplete */}
           <form onSubmit={(e) => void handleSubmit(e)} className="space-y-6">
             <Input
               type="text"
               value={fmdId}
               onChange={(e) => setFmdId(e.target.value)}
               placeholder={t('username_placeholder')}
+              autoComplete="username"
               required
             />
 
@@ -139,6 +141,7 @@ export const LoginForm = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder={t('password_placeholder')}
+              autoComplete="current-password"
               required
             />
 
