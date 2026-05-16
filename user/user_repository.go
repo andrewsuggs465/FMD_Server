@@ -444,7 +444,7 @@ func (u *UserRepository) PushUser(user *FMDUser) {
 	request.Header.Set("Urgency", "high")
 	request.Header.Set("User-Agent", fmt.Sprintf("fmd-server/%s", version.VERSION))
 
-	client := &http.Client{}
+	client := &http.Client{Timeout: 10 * time.Second}
 	_, err = client.Do(request)
 	if err != nil {
 		log.Error().Err(err).Str("userid", user.UID).Msg("failed to send push to user")

@@ -20,6 +20,10 @@ import (
 var uio user.UserRepository
 var server *http.Server
 
+// Generous, to allow for image upload/download on slow connections
+const readTimeout = 60 * time.Second
+const writeTimeout = 60 * time.Second
+
 func handleRequests(config *viper.Viper) {
 	mux := buildServeMux(config)
 
@@ -46,7 +50,14 @@ func handleRequests(config *viper.Viper) {
 			Int(conf.CONF_PORT_SECURE, portSecure).
 			Msg("listening on secure port")
 		securePort := ":" + strconv.Itoa(portSecure)
-		server = &http.Server{Addr: securePort, Handler: mux}
+
+		server = &http.Server{
+			Addr:         securePort,
+			Handler:      mux,
+			ReadTimeout:  readTimeout,
+			WriteTimeout: writeTimeout,
+		}
+
 		err := server.ListenAndServeTLS(serverCrt, serverKey)
 		if err != nil && err != http.ErrServerClosed {
 			log.Fatal().Err(err).Msg("failed to serve with TLS")
@@ -56,7 +67,14 @@ func handleRequests(config *viper.Viper) {
 			Int(conf.CONF_PORT_INSECURE, portInsecure).
 			Msg("listening on insecure port")
 		insecureAddr := ":" + strconv.Itoa(portInsecure)
-		server = &http.Server{Addr: insecureAddr, Handler: mux}
+
+		server = &http.Server{
+			Addr:         insecureAddr,
+			Handler:      mux,
+			ReadTimeout:  readTimeout,
+			WriteTimeout: writeTimeout,
+		}
+
 		err := server.ListenAndServe()
 		if err != nil && err != http.ErrServerClosed {
 			log.Fatal().Err(err).Msg("failed to serve with HTTP")
@@ -97,7 +115,12 @@ func handleRequestsSocket(handler http.Handler, socketPath string, socketChmod i
 			Msg("error modifying unix socket permissions")
 	}
 
-	server = &http.Server{Handler: handler}
+	server = &http.Server{
+		Handler:      handler,
+		ReadTimeout:  readTimeout,
+		WriteTimeout: writeTimeout,
+	}
+
 	err = server.Serve(unixListener)
 	if err != nil && err != http.ErrServerClosed {
 		log.Error().Err(err).Msg("error serving unix server")
