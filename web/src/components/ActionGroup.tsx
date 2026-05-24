@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 import { ActionItem } from '@/components/ActionItem';
 
-interface GroupActionItem {
+interface ActionGroupItem {
   icon: LucideIcon;
   title: string;
   description: string | null;
@@ -17,7 +17,7 @@ interface ActionGroupProps {
   title: string;
   description?: string | null;
   icon: LucideIcon;
-  actions: GroupActionItem[];
+  actions: ActionGroupItem[];
   disabled?: boolean;
 }
 
@@ -60,7 +60,7 @@ export const ActionGroup = ({
       <div
         className={cn(
           'overflow-hidden transition-all duration-200',
-          open ? 'max-h-[1000px]' : 'max-h-0'
+          open ? 'max-h-250' : 'max-h-0'
         )}
       >
         <div className="border-t border-gray-200 dark:border-gray-700">

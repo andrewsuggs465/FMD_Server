@@ -249,12 +249,14 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
       onClick: () => void executeCommand(COMMANDS.GPS_OFF),
     },
   ];
+
   const groupLocationServices = {
     icon: Satellite,
     title: tCommands('location_service_group.title'),
     description: tCommands('location_service_group.description'),
     actions: actionsLocationServices,
   };
+
   const actionsBluetooth = [
     {
       icon: Bluetooth,
@@ -269,12 +271,14 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
       onClick: () => void executeCommand(COMMANDS.BLUETOOTH_OFF),
     },
   ];
+
   const groupBluetooth = {
     icon: Bluetooth,
     title: tCommands('bluetooth_group.title'),
     description: tCommands('bluetooth_group.description'),
     actions: actionsBluetooth,
   };
+
   const actionsRinger = [
     {
       icon: Bell,
@@ -295,12 +299,14 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
       onClick: () => void executeCommand(COMMANDS.RINGERMODE_SILENT),
     },
   ];
+
   const groupRinger = {
     icon: Bell,
     title: tCommands('ringer_group.title'),
     description: tCommands('ringer_group.description'),
     actions: actionsRinger,
   };
+
   const actionsDnd = [
     {
       icon: BellOff,
@@ -315,7 +321,8 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
       onClick: () => void executeCommand(COMMANDS.NODISTURB_OFF),
     },
   ];
-  const groupDND = {
+
+  const groupDnd = {
     icon: BellOff,
     title: tCommands('dnd_group.title'),
     description: tCommands('dnd_group.description'),
@@ -329,7 +336,7 @@ export const DevicePanel = ({ onLocateCommand, onViewPhotos }: DevicePanelProps)
     groupLocationServices,
     groupBluetooth,
     groupRinger,
-    groupDND,
+    groupDnd,
   ];
 
   const currentLocation = locations[currentLocationIndex];

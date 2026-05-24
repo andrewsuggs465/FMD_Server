@@ -13,11 +13,11 @@
   },
   "location_service_group": {
     "title": "Location Services",
-    "description": "Enable/Disable Location Services"
+    "description": "Enable/disable Location Services"
   },
   "bluetooth_group": {
     "title": "Bluetooth",
-    "description": "Enable/Disable Do Not Bluetooth"
+    "description": "Enable/disable Bluetooth"
   },
   "ringer_group": {
     "title": "Ringer",
@@ -25,7 +25,7 @@
   },
   "dnd_group": {
     "title": "Do Not Disturb",
-    "description": "Enable/Disable Do Not Disturb"
+    "description": "Enable/disable Do Not Disturb"
   },
   "locate_all": {
     "title": "All",
