@@ -7,13 +7,16 @@ import { initReactI18next } from 'react-i18next';
 export const SUPPORTED_LANGUAGES_PAIRS = [
   { code: 'en', label: 'English' },
   // English at the top, then alphabetically
+  { code: 'cs', label: 'Čeština' },
   { code: 'de', label: 'Deutsch' },
   { code: 'el', label: 'ελληνικά' },
   { code: 'et', label: 'eesti keel' },
   { code: 'fr', label: 'Français' },
+  // { code: 'hu', label: 'Magyar' },
   { code: 'lv', label: 'Latviešu' },
   { code: 'nl', label: 'Nederlands' },
   { code: 'pt-BR', label: 'Português do Brasil' },
+  { code: 'pt', label: 'Português' },
   { code: 'sl', label: 'Slovenščina' },
   { code: 'zh-Hans', label: 'Chinese Simplified' },
   { code: 'zh-Hant', label: '中文（繁體）' }, // Chinese Traditional
