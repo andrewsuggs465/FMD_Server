@@ -1,0 +1,15 @@
+{
+  "subtitle": "Esta plataforma serve para localizar e controlar os seus dispositivos.",
+  "setup_instruction_1": "Para começar,",
+  "setup_instruction_2": "instale a app do FMD Android",
+  "setup_instruction_3": "no seu dispositivo móvel. Depois use a app para cadastrar uma conta no FMD Server.",
+  "username_placeholder": "Nome de utilizador",
+  "password_placeholder": "Palavra-passe",
+  "remember_me": "Lembre-me",
+  "log_in": "Conectar-se",
+  "logging_in": "A conectar…",
+  "login_slow": "O hashing da palavra-passe parece lento. Isto novamente acontece quando o JIT do JavaScript está desativado no seu navegador. Pode ativar o JIT, ou ser utente e esperar até 5 minutos.",
+  "project_website": "Site do projeto",
+  "source_code": "Código-fonte",
+  "privacy_notice": "Informações de privacidade"
+}

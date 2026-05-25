@@ -1,0 +1,34 @@
+{
+  "title": "Configurações",
+  "general": "Geral",
+  "about": "Sobre",
+  "theme": "Tema",
+  "theme_dark": "Escuro",
+  "theme_light": "Claro",
+  "theme_system": "Sistema",
+  "units": "Unidades",
+  "units_metric": "Métricas",
+  "units_imperial": "Imperiais",
+  "account": "Conta e dados",
+  "export_data": "Exportar dados",
+  "export_data_loading_message": "A descarregar dados. Isto pode demorar um tempo, especialmente se tiver muitas fotos.",
+  "delete_locations": {
+    "button": "Apagar localizações",
+    "title": "Apagar todas as localizações?",
+    "description": "Todas as localizações serão apagadas do servidor para sempre. Isto não pode ser desfeito.",
+    "success": "Localizações foram apagadas com sucesso."
+  },
+  "delete_pictures": {
+    "button": "Apagar fotos",
+    "title": "Apagar todas as fotos?",
+    "description": "Todas as fotos serão apagadas do servidor para sempre. Isto não pode ser desfeito.",
+    "success": "Fotos foram apagadas com sucesso."
+  },
+  "delete_account": "Apagar conta",
+  "delete_account_title": "Apagar conta?",
+  "delete_account_description": "A sua conta e todos os dados serão apagados do servidor. Isto não pode ser desfeito.",
+  "language": {
+    "title": "Idioma"
+  },
+  "about_text": "Um servidor usado para comunicar com a app do FMD Android, para localizar e controlar os seus dispositivos."
+}
