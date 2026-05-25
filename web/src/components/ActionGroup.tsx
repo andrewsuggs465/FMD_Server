@@ -35,7 +35,7 @@ export const ActionGroup = ({
       <Button
         variant="ghost"
         onClick={() => setOpen((prev) => !prev)}
-        className="h-auto w-full justify-start gap-3 rounded-none border-gray-200 p-4 last:border-b-0 bg-gray-200 dark:bg-white/4 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-white/8"
+        className="h-auto w-full justify-start gap-3 rounded-lg border-gray-200 p-4 last:border-b-0 bg-gray-200 dark:bg-white/4 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-white/8"
       >
         <div className={cn('rounded-lg p-2', 'bg-gray-100 dark:bg-gray-800')}>
           <Icon className={cn('h-5 w-5', 'text-gray-700 dark:text-gray-300')} />
