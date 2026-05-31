@@ -1,22 +1,22 @@
 {
   "locate_all": {
-    "title": "Poloha: Vše",
+    "title": "Vše",
     "description": "Získat polohu od všech poskytovatelů polohy"
   },
   "locate_fused": {
-    "title": "Poloha: Sloučená",
+    "title": "Sloučená",
     "description": "Získat polohu ze sítě/GPS"
   },
   "locate_gps": {
-    "title": "Poloha: GPS",
+    "title": "GPS",
     "description": "Získat polohu z GPS"
   },
   "locate_cell": {
-    "title": "Poloha: Mobilní věže",
+    "title": "Mobilní věže",
     "description": "Získat polohu z okolních mobilních věcí pomocí OpenCelliD a/nebo BeaconDB"
   },
   "locate_last": {
-    "title": "Poloha: Poslední známá",
+    "title": "Poslední známá",
     "description": "Získat poslední známou polohu (rychlé, ale může být zastaralá)"
   },
   "ring": {
@@ -60,15 +60,15 @@
     "title": "Vypnout Bluetooth"
   },
   "ringer_normal": {
-    "title": "Vyzvánění: Normální",
+    "title": "Normální",
     "description": "Nastavit režim vyzvánění na normální"
   },
   "ringer_vibrate": {
-    "title": "Vyzvánění: Vibrace",
+    "title": "Vibrace",
     "description": "Nastavit režim vyzvánění na vibrace"
   },
   "ringer_silent": {
-    "title": "Vyzvánění: Tiché",
+    "title": "Tiché",
     "description": "Nastavit režim vyzvánění na tiché"
   },
   "dnd_on": {
@@ -98,5 +98,35 @@
     "ringermode_silent": "Nastavování vyzvánění na tiché…",
     "nodisturb_on": "Zapínání režimu Nerušit…",
     "nodisturb_off": "Vypínání režimu Nerušit…"
-  }
+  },
+  "locate_group": {
+    "title": "Najít",
+    "description": "Získat polohu od jejího poskytovatele"
+  },
+  "general_group": {
+    "title": "Obecné",
+    "description": "Obecné užitečné příkazy"
+  },
+  "camera_group": {
+    "title": "Fotoaparát",
+    "description": "Pořídit nebo zobrazit fotku"
+  },
+  "location_service_group": {
+    "title": "Polohové služby",
+    "description": "Povolit/zakázat polohové služby"
+  },
+  "bluetooth_group": {
+    "title": "Bluetooth",
+    "description": "Povolit/zakázat Bluetooth"
+  },
+  "ringer_group": {
+    "title": "Vyzvánění",
+    "description": "Nastavit režim vyzvánění"
+  },
+  "dnd_group": {
+    "title": "Režim Nerušit",
+    "description": "Povolit/zakázat režim Nerušit"
+  },
+  "enable": "Povolit",
+  "disable": "Zakázat"
 }
