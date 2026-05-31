@@ -1,22 +1,22 @@
 {
   "locate_all": {
-    "title": "Localiseren: Alle",
+    "title": "Alle",
     "description": "Een locatie verkrijgen van alle locatieleveranciers"
   },
   "locate_fused": {
-    "title": "Lokaliseren: Samengesteld",
+    "title": "Samengesteld",
     "description": "Een locatie verkrijgen van netwerk/GPS"
   },
   "locate_gps": {
-    "title": "Localiseren: GPS",
+    "title": "GPS",
     "description": "Een locatie verkrijgen van GPS"
   },
   "locate_cell": {
-    "title": "Localiseren: Zendmasten",
+    "title": "Zendmasten",
     "description": "Een locatie verkrijgen van de nabije zendmasten met OpenCelliD en/of BeaconDB"
   },
   "locate_last": {
-    "title": "Localiseren: Laatst bekende positie",
+    "title": "Laatst bekend",
     "description": "De laatst bekende locatie (snel, maar mogelijk verouderd)"
   },
   "ring": {
@@ -60,15 +60,15 @@
     "title": "Bluetooth uitschakelen"
   },
   "ringer_normal": {
-    "title": "Bellen: Normaal",
+    "title": "Normaal",
     "description": "Bellen instellen op normaal"
   },
   "ringer_vibrate": {
-    "title": "Bellen: Vibreren",
+    "title": "Vibreren",
     "description": "Bellen instellen op vibreren"
   },
   "ringer_silent": {
-    "title": "Bellen: Stil",
+    "title": "Stil",
     "description": "Bellen instellen op stil"
   },
   "dnd_on": {
@@ -98,5 +98,35 @@
     "ringermode_silent": "Bellen instellen op stil…",
     "nodisturb_on": "\"Niet storen\" inschakelen…",
     "nodisturb_off": "\"Niet storen\" uitschakelen…"
-  }
+  },
+  "locate_group": {
+    "title": "Lokaliseren",
+    "description": "Een locatie verkrijgen van een locatieleverancier"
+  },
+  "general_group": {
+    "title": "Algemeen",
+    "description": "Enkele algemene nuttige opdrachten"
+  },
+  "camera_group": {
+    "title": "Camera",
+    "description": "Een foto maken of bekijken"
+  },
+  "location_service_group": {
+    "title": "Locatiediensten",
+    "description": "Locatiediensten in/uitschakelen"
+  },
+  "bluetooth_group": {
+    "title": "Bluetooth",
+    "description": "Bluetooth in/uitschakelen"
+  },
+  "ringer_group": {
+    "title": "Bellen",
+    "description": "Belmodus instellen"
+  },
+  "dnd_group": {
+    "title": "Niet storen",
+    "description": "Niet storen in/uitschakelen"
+  },
+  "enable": "Inschakelen",
+  "disable": "Uitschakelen"
 }
