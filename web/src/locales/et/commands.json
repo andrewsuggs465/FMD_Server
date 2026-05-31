@@ -12,23 +12,23 @@
     "description": "Lukusta nutiseadme ekraan"
   },
   "locate_all": {
-    "title": "Asukohatuvastus: kõik allikad",
+    "title": "Kõik",
     "description": "Asukoht tuvastatakse kõikide teenusepakkujate abil"
   },
   "locate_fused": {
-    "title": "Asukohatuvastus: ühendatud allikad",
+    "title": "Ühendatud allikad",
     "description": "Asukoht tuvastatakse võrgu ja GPS-i abil"
   },
   "locate_gps": {
-    "title": "Asukohatuvastus: GPS",
+    "title": "GPS",
     "description": "Asukoht tuvastatakse GPS-i abil"
   },
   "locate_cell": {
-    "title": "Asukohatuvastus: mobiilivõrk",
+    "title": "Mobiilivõrk",
     "description": "Asukoht tuvastatakse mobiilivõrgu abil, kasutades OpenCelliD ja/või BeaconDB andmekogusid"
   },
   "locate_last": {
-    "title": "Asukohatuvastus: viimane teadaolev",
+    "title": "Viimane teadaolev",
     "description": "Asukohaks nimetatakse viimati tuvastatud asukoht (kiire, aga ei pruugi olla täpne)"
   },
   "camera_front": {
@@ -60,15 +60,15 @@
     "description": "Tühjenda kogu seade ja taasta tehaseseadistused"
   },
   "ringer_normal": {
-    "title": "Helin: tavaline",
+    "title": "Tavaline",
     "description": "Määra tavaline telefonihelin"
   },
   "ringer_vibrate": {
-    "title": "Helin: värin",
+    "title": "Värin",
     "description": "Määra telefonivärin"
   },
   "ringer_silent": {
-    "title": "Helin: vaikne",
+    "title": "Vaikne",
     "description": "Määra telefonihelin vaikseks"
   },
   "dnd_on": {
@@ -98,5 +98,35 @@
     "ringermode_silent": "Seadistan helina vaikseks…",
     "nodisturb_on": "Lülitan „Ära sega mind“ režiimi sisse…",
     "nodisturb_off": "Lülitan „Ära sega mind“ režiimi välja…"
-  }
+  },
+  "locate_group": {
+    "title": "Tuvasta asukoht",
+    "description": "Tuvasta asukoht asukohateenuse abil"
+  },
+  "general_group": {
+    "title": "Üldine",
+    "description": "Mõned üldised kasulikud käsud"
+  },
+  "camera_group": {
+    "title": "Kaamera",
+    "description": "Pildista või vaata fotot"
+  },
+  "location_service_group": {
+    "title": "Asukohateenused",
+    "description": "Lülita asukohateenused sisse/välja"
+  },
+  "bluetooth_group": {
+    "description": "Lülita Bluetooth sisse/välja",
+    "title": "Bluetooth"
+  },
+  "ringer_group": {
+    "title": "Helin",
+    "description": "Seadista helisemise viisi"
+  },
+  "dnd_group": {
+    "title": "Ära sega",
+    "description": "Lülita „Ära sega“ režiim sisse/välja"
+  },
+  "enable": "Lülita sisse",
+  "disable": "Lülita välja"
 }
