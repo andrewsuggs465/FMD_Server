@@ -1,22 +1,22 @@
 {
   "locate_all": {
-    "title": "Localizar: Tudo",
+    "title": "Tudo",
     "description": "Receba uma localização de todos os provedores de localização"
   },
   "locate_fused": {
-    "title": "Localizar: Fundido",
+    "title": "Mesclado",
     "description": "Receba uma localização da rede/GPS"
   },
   "locate_gps": {
-    "title": "Localizar: GPS",
+    "title": "GPS",
     "description": "Receba uma localização do GPS"
   },
   "locate_cell": {
-    "title": "Localizar: Redes móveis",
+    "title": "Redes móveis",
     "description": "Receba uma localização das torres celulares ao redor com o OpenCelliD e/ou BeaconDB"
   },
   "locate_last": {
-    "title": "Localizar: Última conhecida",
+    "title": "Última conhecida",
     "description": "Receba a última localização conhecida (rápido, mas pode ser desatualizada)"
   },
   "ring": {
@@ -60,15 +60,15 @@
     "title": "Desativar Bluetooth"
   },
   "ringer_normal": {
-    "title": "Toque: Normal",
+    "title": "Normal",
     "description": "Configure o modo de toque para o normal"
   },
   "ringer_vibrate": {
-    "title": "Toque: Vibrar",
+    "title": "Vibrar",
     "description": "Configure o modo de toque para vibrar"
   },
   "ringer_silent": {
-    "title": "Toque: Silencioso",
+    "title": "Silencioso",
     "description": "Configure o modo de toque para silencioso"
   },
   "dnd_on": {
@@ -98,5 +98,35 @@
     "ringermode_silent": "Configurando o toque para silencioso…",
     "nodisturb_on": "Ativando o Não Perturbe…",
     "nodisturb_off": "Desativando o Não Perturbe…"
-  }
+  },
+  "locate_group": {
+    "title": "Localizar",
+    "description": "Receba uma localização de um provedor"
+  },
+  "general_group": {
+    "title": "Geral",
+    "description": "Alguns comandos gerais úteis"
+  },
+  "camera_group": {
+    "title": "Câmera",
+    "description": "Tire ou veja uma foto"
+  },
+  "location_service_group": {
+    "title": "Serviços de localização",
+    "description": "Habilitar os serviços de localização"
+  },
+  "bluetooth_group": {
+    "title": "Bluetooth",
+    "description": "Habilitar o Bluetooth"
+  },
+  "ringer_group": {
+    "title": "Toque",
+    "description": "Configure o modo de toque"
+  },
+  "dnd_group": {
+    "title": "Não Perturbe",
+    "description": "Habilitar o Não Perturbe"
+  },
+  "enable": "Ativar",
+  "disable": "Desativar"
 }
