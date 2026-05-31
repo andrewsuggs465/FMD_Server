@@ -4,7 +4,7 @@
     "description": "Ortung von allen Standortanbietern"
   },
   "locate_fused": {
-    "title": "Lokalisieren: Zusammengefasst",
+    "title": "Zusammengefasst",
     "description": "Ortung von Netzwerk/GPS"
   },
   "locate_gps": {
@@ -102,13 +102,16 @@
   "disable": "Deaktivieren",
   "enable": "Aktivieren",
   "locate_group": {
-    "title": "Lokalisieren"
+    "title": "Lokalisieren",
+    "description": "Bekomme einen Standort von einem Standortanbieter"
   },
   "general_group": {
-    "title": "Allgemein"
+    "title": "Allgemein",
+    "description": "Einige allgemeine hilfreiche Befehle"
   },
   "camera_group": {
-    "title": "Kamera"
+    "title": "Kamera",
+    "description": "Nimm ein Foto auf oder schau es an"
   },
   "location_service_group": {
     "title": "Ortungsdienste",
@@ -121,5 +124,9 @@
   "dnd_group": {
     "title": "Nicht stören",
     "description": "Nicht stören aktivieren/deaktivieren"
+  },
+  "ringer_group": {
+    "title": "Klingel",
+    "description": "Setze den Klingelmodus"
   }
 }
