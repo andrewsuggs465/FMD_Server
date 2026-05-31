@@ -1,14 +1,14 @@
 {
   "locate_all": {
-    "title": "Lociraj: vse",
+    "title": "vse",
     "description": "Pridobi lokacijo od vseh ponudnikov lokacij"
   },
   "locate_fused": {
-    "title": "Lociraj: kombinirano",
+    "title": "kombinirano",
     "description": "Pridobi lokacijo iz omrežja/GPS"
   },
   "locate_gps": {
-    "title": "Lociraj: GPS",
+    "title": "GPS",
     "description": "Pridobi lokacijo iz GPS-a"
   },
   "ring": {
@@ -36,11 +36,11 @@
     "description": "Zajemi fotografijo z zadnjo kamero"
   },
   "locate_cell": {
-    "title": "Lociraj: bazna postaja",
+    "title": "bazna postaja",
     "description": "Pridobite lokacijo okoliških baznih postaj mobilnih omrežij z OpenCelliD in/ali BeaconDB"
   },
   "locate_last": {
-    "title": "Lociraj: zadnja znana lokacija",
+    "title": "zadnja znana lokacija",
     "description": "Pridobi zadnjo znano lokacijo (hitro, vendar je lahko zastarelo)"
   },
   "view_photos": {
@@ -60,15 +60,15 @@
     "title": "Onemogoči Bluetooth"
   },
   "ringer_normal": {
-    "title": "Zvonjenje: Običajno",
+    "title": "običajno",
     "description": "Nastavi način zvonjenja na normalen"
   },
   "ringer_vibrate": {
-    "title": "Zvonjenje: Vibriranje",
+    "title": "vibriranje",
     "description": "Nastavi način zvonjenja na vibriranje"
   },
   "ringer_silent": {
-    "title": "Zvonjenje: Tiho",
+    "title": "tiho",
     "description": "Nastavi način zvonjenja na tiho"
   },
   "dnd_on": {
@@ -98,5 +98,35 @@
     "ringermode_silent": "Nastavljanje zvonjenja na tiho…",
     "nodisturb_on": "Omogočanje načina \"ne moti\"…",
     "nodisturb_off": "Onemogočanje načina \"ne moti\"…"
-  }
+  },
+  "locate_group": {
+    "title": "Najdi",
+    "description": "Pridobi lokacijo od ponudnika lokacij"
+  },
+  "general_group": {
+    "title": "Splošno",
+    "description": "Nekaj splošnih uporabnih ukazov"
+  },
+  "camera_group": {
+    "title": "Kamera",
+    "description": "Posnemi ali poglej fotografijo"
+  },
+  "location_service_group": {
+    "title": "Lokacijske storitve",
+    "description": "Omogoči/onemogoči lokacijske storitve"
+  },
+  "bluetooth_group": {
+    "title": "Bluetooth",
+    "description": "Omogoči/onemogoči Bluetooth"
+  },
+  "ringer_group": {
+    "title": "Zvonjenje",
+    "description": "Nastavitev načina zvonjenja"
+  },
+  "dnd_group": {
+    "title": "Ne moti",
+    "description": "Omogoči/onemogoči način ne moti"
+  },
+  "enable": "Omogoči",
+  "disable": "Onemogoči"
 }
