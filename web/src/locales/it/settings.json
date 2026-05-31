@@ -1,0 +1,34 @@
+{
+  "title": "Impostazioni",
+  "general": "Generale",
+  "about": "Informazioni su",
+  "theme": "Tema",
+  "theme_dark": "Scuro",
+  "theme_light": "Chiaro",
+  "theme_system": "Sistema",
+  "units": "Unità",
+  "units_metric": "Metriche",
+  "units_imperial": "Imperiali",
+  "account": "Account & Dati",
+  "export_data": "Esporta dati",
+  "export_data_loading_message": "Scaricamento dei dati. L'operazione potrebbe richiedere un po' di tempo, soprattutto se hai molte foto.",
+  "delete_locations": {
+    "button": "Cancella posizioni",
+    "title": "Cancellare tutte le posizioni?",
+    "description": "Tutte le posizioni verranno eliminate definitivamente dal server. Questa operazione non può essere annullata.",
+    "success": "Le posizioni sono state eliminate correttamente."
+  },
+  "delete_pictures": {
+    "button": "Cancella foto",
+    "title": "Cancellare tutte le foto?",
+    "description": "Tutte le foto verranno eliminate definitivamente dal server. Questa operazione non può essere annullata.",
+    "success": "Le foto sono state eliminate correttamente."
+  },
+  "delete_account": "Cancella account",
+  "delete_account_title": "Cancellare l'account?",
+  "delete_account_description": "Il tuo account e tutti i dati saranno eliminati definitivamente dal server. Questa operazione non può essere annullata.",
+  "language": {
+    "title": "Lingua"
+  },
+  "about_text": "Un server per comunicare con l'app FMD per Android, per individuare e controllare i tuoi dispositivi."
+}

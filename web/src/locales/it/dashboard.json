@@ -1,0 +1,21 @@
+{
+  "loading": "Caricamento…",
+  "no_devices": "Nessun dispositivo",
+  "last_location": "Ultima posizione",
+  "updated": "Aggiornata",
+  "location": {
+    "recorded_at": "Registrata il",
+    "no_data": "Non ci sono ancora dati sulla posizione. Invia un comando di localizzazione utilizzando i pulsanti qui sotto!",
+    "older": "Precedente",
+    "newer": "Successiva",
+    "no_push_url": "Non è stato configurato alcun URL di notifica push. Il dispositivo non riceverà comandi finché non avrai configurato le notifiche push nell'app Android."
+  },
+  "command_failed": "Comando fallito!",
+  "time": "Data",
+  "battery": "Batteria",
+  "provider": "Fornitore",
+  "accuracy": "Accuratezza",
+  "altitude": "Altitudine",
+  "speed": "Velocità",
+  "bearing": "Orientamento"
+}

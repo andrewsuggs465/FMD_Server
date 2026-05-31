@@ -1,0 +1,31 @@
+{
+  "factory_reset": {
+    "title": "Ripristinare le impostazioni di fabbrica del dispositivo?",
+    "message": "Questa operazione cancellerà definitivamente tutti i dati dal tuo dispositivo e lo ripristinerà alle impostazioni di fabbrica. Non è possibile annullare questa operazione.",
+    "confirm": "Ripristino impostazioni di fabbrica",
+    "password_placeholder": "Inserisci la password di cancellazione",
+    "password_hint": "La password di cancellazione viene configurata nell'app FMD per Android. Non si tratta della password del server.",
+    "error_empty_password": "Per favore inserisci la password di cancellazione"
+  },
+  "loading": {
+    "title": "Caricamento"
+  },
+  "lock": {
+    "title": "Bloccare il dispositivo?",
+    "message": "Una volta che il dispositivo è stato bloccato, per sbloccarlo è necessario inserire il PIN o la password. Lo sblocco biometrico non funzionerà finché non verrà inserito il PIN o la password.",
+    "confirm": "Blocca",
+    "message_placeholder": "Inserisci messaggio",
+    "message_hint": "Inserisci un messaggio da visualizzare sulla schermata di blocco. Se lasci questo campo vuoto, sulla schermata di blocco verrà visualizzato il messaggio configurato nelle impostazioni FMD per Android."
+  },
+  "pictures": {
+    "title": "Foto",
+    "empty": "Nessuna foto disponibile",
+    "of": "di"
+  },
+  "webcrypto_warning": {
+    "title": "Web Cryptography API non disponibile",
+    "message": "FMD Server non funziona perché l'API di crittografia Web non è disponibile.",
+    "detail": "Probabilmente ciò è dovuto al fatto che stai visitando questo sito tramite il protocollo HTTP non sicuro. Ti preghiamo di utilizzare HTTPS. Se gestisci il sito in proprio, ti invitiamo a leggere la",
+    "link_text": "guida di installazione"
+  }
+}

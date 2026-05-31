@@ -1,0 +1,132 @@
+{
+  "locate_group": {
+    "title": "Localizza",
+    "description": "Ottieni una posizione da un fornitore di servizi di localizzazione"
+  },
+  "general_group": {
+    "title": "Generale",
+    "description": "Alcuni comandi utili di carattere generale"
+  },
+  "camera_group": {
+    "title": "Fotocamera",
+    "description": "Scatta o guarda una foto"
+  },
+  "location_service_group": {
+    "title": "Servizi di Localizzazione",
+    "description": "Attiva/disattiva i servizi di localizzazione"
+  },
+  "bluetooth_group": {
+    "title": "Bluetooth",
+    "description": "Attiva/disattiva Bluetooth"
+  },
+  "ringer_group": {
+    "title": "Suoneria",
+    "description": "Imposta la modalità di suoneria"
+  },
+  "dnd_group": {
+    "title": "Non Disturbare",
+    "description": "Attiva/disattiva la modalità “Non disturbare”"
+  },
+  "locate_all": {
+    "title": "Tutto",
+    "description": "Recupera una posizione da tutti i servizi di localizzazione"
+  },
+  "locate_fused": {
+    "title": "Combinato",
+    "description": "Rileva la posizione tramite rete/GPS"
+  },
+  "locate_gps": {
+    "title": "GPS",
+    "description": "Ottieni la posizione tramite GPS"
+  },
+  "locate_cell": {
+    "title": "Cella",
+    "description": "Ottieni la posizione tramite le torri di telefonia mobile circostanti con OpenCelliD e/o BeaconDB"
+  },
+  "locate_last": {
+    "title": "Ultimo aggiornamento",
+    "description": "Ottieni l'ultima posizione nota (veloce, ma potrebbe non essere aggiornata)"
+  },
+  "ring": {
+    "title": "Suona",
+    "description": "Riproduci un suono ad alto volume sul dispositivo"
+  },
+  "flash": {
+    "title": "Torcia",
+    "description": "Fai lampeggiare la torcia"
+  },
+  "lock": {
+    "title": "Blocca",
+    "description": "Blocca lo schermo del dispositivo"
+  },
+  "factory_reset": {
+    "title": "Ripristino di Fabbrica",
+    "description": "Cancella tutti i dati e ripristina le impostazioni di fabbrica del dispositivo"
+  },
+  "camera_front": {
+    "title": "Fotocamera anteriore",
+    "description": "Scatta una foto con la fotocamera anteriore"
+  },
+  "camera_back": {
+    "title": "Fotocamera posteriore",
+    "description": "Scatta una foto con la fotocamera posteriore"
+  },
+  "view_photos": {
+    "title": "Guarda Foto",
+    "description": "Guarda le foto scattate dal dispositivo"
+  },
+  "gps_on": {
+    "title": "Attiva i servizi di localizzazione"
+  },
+  "gps_off": {
+    "title": "Disattiva i servizi di localizzazione"
+  },
+  "bluetooth_on": {
+    "title": "Abilita Bluetooth"
+  },
+  "bluetooth_off": {
+    "title": "Disabilita Bluetooth"
+  },
+  "ringer_normal": {
+    "title": "Normale",
+    "description": "Imposta la suoneria normale"
+  },
+  "ringer_vibrate": {
+    "title": "Vibrazione",
+    "description": "Imposta la modalità di suoneria su “vibrazione”"
+  },
+  "ringer_silent": {
+    "title": "Silenzioso",
+    "description": "Imposta la suoneria su silenzioso"
+  },
+  "dnd_on": {
+    "title": "Attiva la modalità Non disturbare"
+  },
+  "dnd_off": {
+    "title": "Disattiva la modalità Non disturbare"
+  },
+  "success": {
+    "locate_all": "Richiesta posizione…",
+    "locate_fused": "Ricerca posizione combinata…",
+    "locate_gps": "Richiesta posizione gps…",
+    "locate_cell": "Richiesta posizione cella…",
+    "locate_last": "Richiesta dell'ultima posizione nota…",
+    "ring": "Sta squillando il dispositivo…",
+    "flash": "Lampeggio della torcia…",
+    "lock": "Blocco del dispositivo…",
+    "delete": "Ripristino di fabbrica avviato…",
+    "camera_front": "Scatto foto frontale…",
+    "camera_back": "Scatto foto posteriore…",
+    "bluetooth_on": "Attivazione del Bluetooth…",
+    "bluetooth_off": "Disattivazione del Bluetooth…",
+    "gps_on": "Attivazione dei servizi di localizzazione…",
+    "gps_off": "Disattivazione dei servizi di localizzazione…",
+    "ringermode_normal": "Impostazione della suoneria su normale…",
+    "ringermode_vibrate": "Impostazione della suoneria su vibrazione…",
+    "ringermode_silent": "Impostazione della suoneria su silenzioso…",
+    "nodisturb_on": "Attivazione della modalità Non disturbare…",
+    "nodisturb_off": "Disattivazione della modalità Non disturbare…"
+  },
+  "enable": "Attivo",
+  "disable": "Disattivo"
+}
