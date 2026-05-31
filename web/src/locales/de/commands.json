@@ -1,6 +1,6 @@
 {
   "locate_all": {
-    "title": "Lokalisieren: Alle",
+    "title": "Alle",
     "description": "Ortung von allen Standortanbietern"
   },
   "locate_fused": {
@@ -8,15 +8,15 @@
     "description": "Ortung von Netzwerk/GPS"
   },
   "locate_gps": {
-    "title": "Lokalisieren: GPS",
+    "title": "GPS",
     "description": "Ortung per GPS"
   },
   "locate_cell": {
-    "title": "Lokalisieren: Mobilfunk",
+    "title": "Mobilfunk",
     "description": "Ortung durch umliegende Funkmasten mit OpenCelliD und/oder BeaconDB"
   },
   "locate_last": {
-    "title": "Lokalisieren: Letzte bekannte Position",
+    "title": "Zuletzt bekannt",
     "description": "Letzte bekannte Position (schnell, aber möglicherweise veraltet)"
   },
   "ring": {
@@ -60,15 +60,15 @@
     "title": "Bluetooth deaktivieren"
   },
   "ringer_normal": {
-    "title": "Klingelmodus: Normal",
+    "title": "Normal",
     "description": "Klingelmodus auf Normal einstellen"
   },
   "ringer_vibrate": {
-    "title": "Klingelmodus: Vibration",
+    "title": "Vibrieren",
     "description": "Klingelmodus auf Vibration einstellen"
   },
   "ringer_silent": {
-    "title": "Klingelmodus: Lautlos",
+    "title": "Lautlos",
     "description": "Klingelmodus auf Lautlos einstellen"
   },
   "dnd_on": {
@@ -98,5 +98,28 @@
     "ringermode_silent": "Klingelton wird auf lautlos gestellt…",
     "nodisturb_on": "„Nicht stören“-Modus wird aktiviert…",
     "nodisturb_off": "„Nicht stören“-Modus wird deaktiviert…"
+  },
+  "disable": "Deaktivieren",
+  "enable": "Aktivieren",
+  "locate_group": {
+    "title": "Lokalisieren"
+  },
+  "general_group": {
+    "title": "Allgemein"
+  },
+  "camera_group": {
+    "title": "Kamera"
+  },
+  "location_service_group": {
+    "title": "Ortungsdienste",
+    "description": "Ortungsdienste aktivieren/deaktivieren"
+  },
+  "bluetooth_group": {
+    "title": "Bluetooth",
+    "description": "Bluetooth aktivieren/deaktivieren"
+  },
+  "dnd_group": {
+    "title": "Nicht stören",
+    "description": "Nicht stören aktivieren/deaktivieren"
   }
 }
