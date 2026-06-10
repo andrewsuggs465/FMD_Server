@@ -70,10 +70,6 @@ func UpdatePushServerMetrics(old string, new string) {
 }
 
 func getLabelForUrl(url string) string {
-	if url == "" {
-		panic("url must be non-empty")
-	}
-
 	if strings.HasPrefix(url, PUSH_URL_CONVERSATIONS) {
 		return LABEL_PUSH_CONVERSATIONS
 	} else if strings.HasPrefix(url, PUSH_URL_FCM) {

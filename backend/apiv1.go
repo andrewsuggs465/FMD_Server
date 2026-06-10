@@ -71,7 +71,11 @@ func getLocation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	index, _ := strconv.Atoi(request.Data)
+	index, err := strconv.Atoi(request.Data)
+	if err != nil {
+		http.Error(w, "Invalid index", http.StatusBadRequest)
+		return
+	}
 	if index == -1 {
 		index = uio.GetLocationSize(user) - 1
 	}
@@ -180,7 +184,11 @@ func getPicture(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	index, _ := strconv.Atoi(request.Data)
+	index, err := strconv.Atoi(request.Data)
+	if err != nil {
+		http.Error(w, "Invalid index", http.StatusBadRequest)
+		return
+	}
 	if index == -1 {
 		index = uio.GetPictureSize(user) - 1
 	}

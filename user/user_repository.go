@@ -20,7 +20,7 @@ type UserRepository struct {
 	userIDLength int
 	maxSavedLoc  int
 	maxSavedPic  int
-	ACC          AccessController
+	ACC          *AccessController
 	UB           *FMDDB
 }
 

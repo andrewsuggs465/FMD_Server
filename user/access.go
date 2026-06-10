@@ -3,10 +3,13 @@ package user
 import (
 	"errors"
 	"fmd-server/metrics"
+	"sync"
 	"time"
 )
 
 type AccessController struct {
+	mu sync.Mutex
+
 	// map token values to token structs
 	// This is because a given user id can have multiple active sessions
 	// in parallel, for example, Android and web.
@@ -34,8 +37,8 @@ const DURATION_LOCKED_SECS = 10 * 60          // 10 mins
 const DEFAULT_TOKEN_VALID_SECS = 15 * 60      // 15 mins
 const MAX_TOKEN_VALID_SECS = 7 * 24 * 60 * 60 // 1 week
 
-func NewAccessController() AccessController {
-	controller := AccessController{
+func NewAccessController() *AccessController {
+	controller := &AccessController{
 		accessTokens: make(map[string]AccessToken),
 		lockedIDs:    make(map[string]LockedId),
 	}
@@ -44,6 +47,9 @@ func NewAccessController() AccessController {
 }
 
 func (a *AccessController) IncrementLock(userId string) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
 	now := time.Now().Unix()
 	lId, exists := a.lockedIDs[userId]
 
@@ -71,11 +77,17 @@ func (a *AccessController) IncrementLock(userId string) {
 }
 
 func (a *AccessController) ResetLock(userId string) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
 	delete(a.lockedIDs, userId)
 	metrics.FailedLoginAccounts.Set(float64(len(a.lockedIDs)))
 }
 
 func (a *AccessController) IsLocked(id string) bool {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
 	lId, exists := a.lockedIDs[id]
 
 	if !exists {
@@ -97,6 +109,9 @@ func (a *AccessController) IsLocked(id string) bool {
 }
 
 func (a *AccessController) CheckAccessToken(tokenToCheck string) (string, error) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
 	tk, exists := a.accessTokens[tokenToCheck]
 
 	if !exists {
@@ -114,6 +129,9 @@ func (a *AccessController) CheckAccessToken(tokenToCheck string) (string, error)
 }
 
 func (a *AccessController) CreateNewAccessToken(id string, sessionDurationSeconds uint64) AccessToken {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
 	if sessionDurationSeconds == 0 {
 		sessionDurationSeconds = DEFAULT_TOKEN_VALID_SECS
 	} else if sessionDurationSeconds > MAX_TOKEN_VALID_SECS {
@@ -139,6 +157,7 @@ func (a *AccessController) CreateNewAccessToken(id string, sessionDurationSecond
 // Remove expired tokens and locks from the controller.
 func (a *AccessController) cronRemoveExpired() {
 	for range time.Tick(15 * time.Minute) {
+		a.mu.Lock()
 		now := time.Now().Unix()
 
 		// Remove expired access tokens
@@ -159,10 +178,14 @@ func (a *AccessController) cronRemoveExpired() {
 
 		metrics.ActiveSessions.Set(float64(len(a.accessTokens)))
 		metrics.FailedLoginAccounts.Set(float64(len(a.lockedIDs)))
+		a.mu.Unlock()
 	}
 }
 
 func (a *AccessController) ResetTokensForUser(userId string) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
 	// XXX: This is not very efficient
 	for key, value := range a.accessTokens {
 		if value.DeviceId == userId {

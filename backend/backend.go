@@ -185,7 +185,7 @@ func StopServer() {
 	}
 
 	db, err := uio.UB.DB.DB()
-	if err != nil {
+	if err == nil {
 		db.Close()
 	}
 
