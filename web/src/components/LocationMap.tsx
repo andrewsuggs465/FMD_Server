@@ -18,6 +18,10 @@ const CIRCLE_WEIGHT = 0;
 
 const ACCURACY_CIRCLE_RANGE = 5;
 
+// Max number of historical positions to render at once. Keeps marker/polyline work O(1) as the
+// user scrolls through a long history, preventing the UI from freezing (#140).
+const MARKER_WINDOW = 50;
+
 const formatProvider = (provider: string): string => {
   const providerMap: Record<string, string> = {
     gps: 'GPS',
@@ -180,6 +184,12 @@ export const LocationMap = () => {
     const { lat, lon } = location;
 
     locationCacheRef.current.add(currentLocationIndex);
+
+    // Evict indices outside the sliding window to keep the rendered set bounded.
+    const windowStart = Math.max(0, currentLocationIndex - MARKER_WINDOW);
+    for (const idx of locationCacheRef.current) {
+      if (idx < windowStart) locationCacheRef.current.delete(idx);
+    }
 
     const cachedIndices = Array.from(locationCacheRef.current).sort((a, b) => a - b);
     const cachedLocations = cachedIndices.map((idx) => locations[idx]);

@@ -28,10 +28,10 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	// No default values as those are handled by the config
-	rootCmd.Flags().StringVarP(&configPath, "config", "c", "", "Path to the config file")
+	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "", "Path to the config file")
 
-	rootCmd.Flags().StringVarP(&dbDir, "db-dir", "d", "", "Path to the database directory")
-	config.BindPFlag(conf.CONF_DATABASE_DIR, rootCmd.Flags().Lookup("db-dir"))
+	rootCmd.PersistentFlags().StringVarP(&dbDir, "db-dir", "d", "", "Path to the database directory")
+	config.BindPFlag(conf.CONF_DATABASE_DIR, rootCmd.PersistentFlags().Lookup("db-dir"))
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
