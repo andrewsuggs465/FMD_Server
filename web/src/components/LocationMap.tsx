@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type * as LeafletType from 'leaflet';
 import { FullScreen } from 'leaflet.fullscreen';
+import { ChevronLeft, ChevronRight, Expand } from 'lucide-react';
 import { useStore, type TimeFilter } from '@/lib/store';
 import { convertDistance, convertSpeed } from '@/utils/units';
 import { useThemeColors } from '@/hooks/useThemeColors';
@@ -55,6 +56,7 @@ export const LocationMap = () => {
     trackers,
     timeFilter,
     selectedDeviceId,
+    phoneVisible,
   } = useStore();
 
   const { t } = useTranslation('dashboard');
@@ -66,6 +68,7 @@ export const LocationMap = () => {
   const tileLayerRef = useRef<LeafletType.TileLayer | null>(null);
   const markersLayerRef = useRef<LeafletType.LayerGroup | null>(null);
   const accuracyCirclesLayerRef = useRef<LeafletType.LayerGroup | null>(null);
+  const latestMarkersLayerRef = useRef<LeafletType.LayerGroup | null>(null);
   const polylineRef = useRef<LeafletType.Polyline | null>(null);
   const selectedIconRef = useRef<LeafletType.Icon | null>(null);
 
@@ -73,10 +76,45 @@ export const LocationMap = () => {
 
   const locationCacheRef = useRef<Set<number>>(new Set());
   const lastLocationRef = useRef<{ lat: number; lon: number } | null>(null);
+  const lastSelectedRef = useRef<string | null | undefined>(undefined);
 
   const { mapPrimaryColor, mapAccentColor } = useThemeColors();
   const [mapReady, setMapReady] = useState(false);
   const [tileServerUrl, setTileServerUrl] = useState('');
+
+  // Scrub position within the selected tracker's filtered history. -1 = follow latest.
+  const [trackerScrub, setTrackerScrub] = useState(-1);
+
+  const selectedTracker = useMemo(
+    () => trackers.find((tr) => tr.fmdId === selectedDeviceId) ?? null,
+    [trackers, selectedDeviceId]
+  );
+
+  // Phone history restricted to the active time filter, keeping original indices
+  const phoneFiltered = useMemo(() => {
+    const cutoff = getTimeFilterCutoff(timeFilter);
+    return locations
+      .map((loc, idx) => ({ loc, idx }))
+      .filter(({ loc }) => timeFilter === 'all' || loc.date >= cutoff);
+  }, [locations, timeFilter]);
+
+  const trackerFiltered = useMemo(() => {
+    if (!selectedTracker) return [];
+    const cutoff = getTimeFilterCutoff(timeFilter);
+    return selectedTracker.locations.filter(
+      (loc) => timeFilter === 'all' || loc.date >= cutoff
+    );
+  }, [selectedTracker, timeFilter]);
+
+  const effectiveTrackerScrub =
+    trackerScrub >= 0 && trackerScrub < trackerFiltered.length
+      ? trackerScrub
+      : trackerFiltered.length - 1;
+
+  // Reset the scrubber whenever the device tab or the time filter changes
+  useEffect(() => {
+    setTrackerScrub(-1);
+  }, [selectedDeviceId, timeFilter]);
 
   useEffect(() => {
     void (async () => {
@@ -130,6 +168,7 @@ export const LocationMap = () => {
 
         markersLayerRef.current = leafletRef.current.layerGroup().addTo(mapInstanceRef.current);
         accuracyCirclesLayerRef.current = leafletRef.current.layerGroup().addTo(mapInstanceRef.current);
+        latestMarkersLayerRef.current = leafletRef.current.layerGroup().addTo(mapInstanceRef.current);
 
         tileLayerRef.current = leafletRef.current
           .tileLayer(tileServerUrl, {
@@ -160,7 +199,68 @@ export const LocationMap = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLocationsLoading, tileServerUrl]);
 
-  // Phone location markers (shown when phone tab is selected)
+  const popupHtml = (label: string | null, loc: (typeof locations)[number]) => `
+    <div style="min-width:5rem">
+      ${label ? `<strong>${label}</strong><br/>` : ''}
+      <strong>${t('time')}:</strong> ${new Date(loc.date).toLocaleString()}<br/>
+      <strong>${t('battery')}:</strong> ${loc.bat}%<br/>
+      <strong>${t('provider')}:</strong> ${formatProvider(loc.provider)}<br/>
+      ${loc.accuracy ? `<strong>${t('accuracy')}:</strong> ${convertDistance(loc.accuracy, units)}<br/>` : ''}
+      ${loc.altitude !== undefined ? `<strong>${t('altitude')}:</strong> ${convertDistance(loc.altitude, units)}<br/>` : ''}
+      ${loc.speed !== undefined ? `<strong>${t('speed')}:</strong> ${convertSpeed(loc.speed, units)}<br/>` : ''}
+      ${loc.bearing !== undefined ? `<strong>${t('bearing')}:</strong> ${loc.bearing.toFixed(0)}°` : ''}
+    </div>`;
+
+  // Latest-position markers for every visible device that is NOT the selected tab,
+  // so all devices can be seen on the map at once. Clicking one selects its tab.
+  useEffect(() => {
+    if (!mapInstanceRef.current || !leafletRef.current || !latestMarkersLayerRef.current || !mapReady)
+      return;
+
+    const L = leafletRef.current;
+    const layer = latestMarkersLayerRef.current;
+    layer.clearLayers();
+
+    const { setSelectedDevice } = useStore.getState();
+
+    if (phoneVisible && selectedDeviceId !== null && locations.length > 0) {
+      const loc = locations[locations.length - 1];
+      const marker = L.marker([loc.lat, loc.lon], { opacity: 0.85 })
+        .addTo(layer)
+        .bindPopup(popupHtml('Phone', loc), {
+          autoClose: false,
+          closeOnClick: false,
+          closeButton: false,
+        });
+      marker.on('mouseover', () => marker.openPopup());
+      marker.on('mouseout', () => marker.closePopup());
+      marker.on('click', () => setSelectedDevice(null));
+    }
+
+    for (const tracker of trackers) {
+      if (!tracker.visible || tracker.fmdId === selectedDeviceId || tracker.locations.length === 0)
+        continue;
+      const loc = tracker.locations[tracker.locations.length - 1];
+      const cm = L.circleMarker([loc.lat, loc.lon], {
+        radius: 8,
+        color: '#fff',
+        fillColor: tracker.color,
+        fillOpacity: 0.9,
+        weight: 2,
+      }).addTo(layer);
+      cm.bindPopup(popupHtml(tracker.label, loc), {
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+      });
+      cm.on('mouseover', () => cm.openPopup());
+      cm.on('mouseout', () => cm.closePopup());
+      cm.on('click', () => setSelectedDevice(tracker.fmdId));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapReady, phoneVisible, trackers, selectedDeviceId, locations, units, t]);
+
+  // Phone location history (shown when phone tab is selected)
   useEffect(() => {
     if (
       !mapInstanceRef.current ||
@@ -170,7 +270,7 @@ export const LocationMap = () => {
     )
       return;
 
-    const showPhone = selectedDeviceId === null;
+    const showPhone = selectedDeviceId === null && phoneVisible;
 
     if (!showPhone || locations.length === 0) {
       markersLayerRef.current.clearLayers();
@@ -185,18 +285,13 @@ export const LocationMap = () => {
       return;
     }
 
-    const cutoff = getTimeFilterCutoff(timeFilter);
-
     let cachedLocations: typeof locations;
     let cachedIndices: number[];
     let effectiveCurrentIndex: number;
 
     if (timeFilter !== 'all') {
-      const filtered = locations
-        .map((loc, idx) => ({ loc, idx }))
-        .filter(({ loc }) => loc.date >= cutoff);
-      cachedIndices = filtered.map(({ idx }) => idx);
-      cachedLocations = filtered.map(({ loc }) => loc);
+      cachedIndices = phoneFiltered.map(({ idx }) => idx);
+      cachedLocations = phoneFiltered.map(({ loc }) => loc);
       effectiveCurrentIndex = cachedIndices.includes(currentLocationIndex)
         ? currentLocationIndex
         : (cachedIndices[cachedIndices.length - 1] ?? currentLocationIndex);
@@ -242,18 +337,11 @@ export const LocationMap = () => {
             : {}
         )
         .addTo(markersLayerRef.current)
-        .bindPopup(
-          `<div style="min-width:5rem">
-            <strong>${t('time')}:</strong> ${new Date(loc.date).toLocaleString()}<br/>
-            <strong>${t('battery')}:</strong> ${loc.bat}%<br/>
-            <strong>${t('provider')}:</strong> ${formatProvider(loc.provider)}<br/>
-            ${loc.accuracy ? `<strong>${t('accuracy')}:</strong> ${convertDistance(loc.accuracy, units)}<br/>` : ''}
-            ${loc.altitude !== undefined ? `<strong>${t('altitude')}:</strong> ${convertDistance(loc.altitude, units)}<br/>` : ''}
-            ${loc.speed !== undefined ? `<strong>${t('speed')}:</strong> ${convertSpeed(loc.speed, units)}<br/>` : ''}
-            ${loc.bearing !== undefined ? `<strong>${t('bearing')}:</strong> ${loc.bearing.toFixed(0)}°` : ''}
-          </div>`,
-          { autoClose: false, closeOnClick: false, closeButton: false }
-        );
+        .bindPopup(popupHtml(null, loc), {
+          autoClose: false,
+          closeOnClick: false,
+          closeButton: false,
+        });
 
       marker.on('mouseover', () => marker.openPopup());
       marker.on('mouseout', () => marker.closePopup());
@@ -276,32 +364,34 @@ export const LocationMap = () => {
       }
     }
 
-    const { lat, lon } = cachedLocations[cachedLocations.length - 1];
+    // Pan to the currently scrubbed/selected point rather than the newest one,
+    // so the scrubber can walk back through history
+    const current = locations[effectiveCurrentIndex] ?? cachedLocations[cachedLocations.length - 1];
     const locationChanged =
       !lastLocationRef.current ||
-      lastLocationRef.current.lat !== lat ||
-      lastLocationRef.current.lon !== lon;
+      lastLocationRef.current.lat !== current.lat ||
+      lastLocationRef.current.lon !== current.lon;
 
     if (locationChanged) {
       if (locationCacheRef.current.size <= 1) {
-        mapInstanceRef.current.setView([lat, lon], calculateZoomLevel(cachedLocations[cachedLocations.length - 1].accuracy));
+        mapInstanceRef.current.setView([current.lat, current.lon], calculateZoomLevel(current.accuracy));
       } else {
-        mapInstanceRef.current.panTo([lat, lon]);
+        mapInstanceRef.current.panTo([current.lat, current.lon]);
       }
-      lastLocationRef.current = { lat, lon };
+      lastLocationRef.current = { lat: current.lat, lon: current.lon };
     }
-  }, [currentLocationIndex, units, locations, mapPrimaryColor, mapAccentColor, mapReady, selectedDeviceId, timeFilter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentLocationIndex, units, locations, mapPrimaryColor, mapAccentColor, mapReady, selectedDeviceId, timeFilter, phoneVisible]);
 
-  // Tracker markers (shown only for the selected tracker tab)
+  // Tracker history (shown only for the selected tracker tab)
   useEffect(() => {
     if (!mapInstanceRef.current || !leafletRef.current || !mapReady) return;
 
     const L = leafletRef.current;
     const map = mapInstanceRef.current;
-    const cutoff = getTimeFilterCutoff(timeFilter);
 
     // Remove layer groups for trackers that no longer exist
-    const currentIds = new Set(trackers.map((t) => t.fmdId));
+    const currentIds = new Set(trackers.map((tr) => tr.fmdId));
     for (const [id, group] of trackerLayerGroupsRef.current) {
       if (!currentIds.has(id)) {
         group.remove();
@@ -316,54 +406,149 @@ export const LocationMap = () => {
       const group = trackerLayerGroupsRef.current.get(tracker.fmdId)!;
       group.clearLayers();
 
-      // Only render the selected tracker
-      if (selectedDeviceId !== tracker.fmdId || tracker.locations.length === 0) continue;
+      // Only render history for the selected, visible tracker
+      if (selectedDeviceId !== tracker.fmdId || !tracker.visible) continue;
+      if (trackerFiltered.length === 0) continue;
 
-      const filtered = tracker.locations.filter((loc) => loc.date >= cutoff);
-      if (filtered.length === 0) continue;
-
-      if (filtered.length > 1) {
+      if (trackerFiltered.length > 1) {
         L.polyline(
-          filtered.map((loc) => [loc.lat, loc.lon] as [number, number]),
+          trackerFiltered.map((loc) => [loc.lat, loc.lon] as [number, number]),
           { color: tracker.color, weight: POLYLINE_WEIGHT, opacity: POLYLINE_OPACITY }
         ).addTo(group);
       }
 
-      filtered.forEach((loc, i) => {
-        const isLatest = i === filtered.length - 1;
+      trackerFiltered.forEach((loc, i) => {
+        const isCurrent = i === effectiveTrackerScrub;
         const cm = L.circleMarker([loc.lat, loc.lon], {
-          radius: isLatest ? 9 : 5,
+          radius: isCurrent ? 9 : 5,
           color: '#fff',
           fillColor: tracker.color,
-          fillOpacity: isLatest ? 1 : 0.75,
-          weight: isLatest ? 2 : 1,
+          fillOpacity: isCurrent ? 1 : 0.75,
+          weight: isCurrent ? 2 : 1,
         }).addTo(group);
 
-        cm.bindPopup(
-          `<div style="min-width:5rem">
-            <strong>${tracker.label}</strong><br/>
-            <strong>${t('time')}:</strong> ${new Date(loc.date).toLocaleString()}<br/>
-            <strong>${t('battery')}:</strong> ${loc.bat}%<br/>
-            <strong>${t('provider')}:</strong> ${formatProvider(loc.provider)}<br/>
-            ${loc.accuracy ? `<strong>${t('accuracy')}:</strong> ${convertDistance(loc.accuracy, units)}<br/>` : ''}
-          </div>`,
-          { autoClose: false, closeOnClick: false, closeButton: false }
-        );
+        cm.bindPopup(popupHtml(tracker.label, loc), {
+          autoClose: false,
+          closeOnClick: false,
+          closeButton: false,
+        });
         cm.on('mouseover', () => cm.openPopup());
         cm.on('mouseout', () => cm.closePopup());
+        cm.on('click', () => setTrackerScrub(i));
+
+        if (isCurrent && loc.accuracy) {
+          L.circle([loc.lat, loc.lon], {
+            radius: loc.accuracy,
+            color: tracker.color,
+            fillColor: tracker.color,
+            fillOpacity: CIRCLE_FILL_OPACITY,
+            weight: CIRCLE_WEIGHT,
+          }).addTo(group);
+        }
       });
 
-      // Pan to tracker's latest location when switching to this tab
-      const latest = filtered[filtered.length - 1];
-      mapInstanceRef.current.setView([latest.lat, latest.lon], calculateZoomLevel(latest.accuracy));
+      const current = trackerFiltered[effectiveTrackerScrub];
+      if (lastSelectedRef.current !== tracker.fmdId) {
+        // Switched to this tab — zoom to the device
+        map.setView([current.lat, current.lon], calculateZoomLevel(current.accuracy));
+      } else {
+        map.panTo([current.lat, current.lon]);
+      }
     }
-  }, [trackers, timeFilter, mapReady, units, t, selectedDeviceId]);
+
+    lastSelectedRef.current = selectedDeviceId;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trackers, trackerFiltered, effectiveTrackerScrub, mapReady, units, t, selectedDeviceId]);
+
+  // ----- Scrubber state for the active tab -----
+  const isPhoneTab = selectedDeviceId === null;
+  const scrubLength = isPhoneTab ? phoneFiltered.length : trackerFiltered.length;
+  const scrubPos = isPhoneTab
+    ? Math.max(
+        0,
+        phoneFiltered.findIndex(({ idx }) => idx === currentLocationIndex) !== -1
+          ? phoneFiltered.findIndex(({ idx }) => idx === currentLocationIndex)
+          : phoneFiltered.length - 1
+      )
+    : effectiveTrackerScrub;
+  const scrubDate =
+    scrubLength > 0
+      ? isPhoneTab
+        ? phoneFiltered[scrubPos]?.loc.date
+        : trackerFiltered[scrubPos]?.date
+      : undefined;
+
+  const setScrubPos = (pos: number) => {
+    const clamped = Math.max(0, Math.min(scrubLength - 1, pos));
+    if (isPhoneTab) {
+      const target = phoneFiltered[clamped];
+      if (target) useStore.setState({ currentLocationIndex: target.idx });
+    } else {
+      setTrackerScrub(clamped);
+    }
+  };
+
+  const fitAllDevices = () => {
+    if (!mapInstanceRef.current || !leafletRef.current) return;
+    const pts: [number, number][] = [];
+    if (phoneVisible && locations.length > 0) {
+      const loc = locations[locations.length - 1];
+      pts.push([loc.lat, loc.lon]);
+    }
+    for (const tracker of trackers) {
+      if (tracker.visible && tracker.locations.length > 0) {
+        const loc = tracker.locations[tracker.locations.length - 1];
+        pts.push([loc.lat, loc.lon]);
+      }
+    }
+    if (pts.length === 0) return;
+    mapInstanceRef.current.fitBounds(leafletRef.current.latLngBounds(pts), {
+      padding: [60, 60],
+      maxZoom: 16,
+    });
+  };
 
   return (
     <div className="bg-fmd-light dark:bg-fmd-dark relative flex h-full w-full flex-col rounded-lg">
       <div ref={mapRef} className="relative flex-1 rounded-lg" />
 
-      {/* Time filter — Leaflet-style control bar, bottom-left */}
+      {/* History scrubber — top-center, steps through the selected device's history */}
+      {mapReady && scrubLength > 1 && (
+        <div className="pointer-events-auto absolute top-[10px] left-1/2 z-[1000] flex -translate-x-1/2 items-center gap-2 rounded border border-gray-300 bg-white px-2.5 py-1.5 shadow-sm dark:border-gray-600 dark:bg-gray-800">
+          <button
+            onClick={() => setScrubPos(scrubPos - 1)}
+            disabled={scrubPos <= 0}
+            title="Previous location"
+            className="rounded p-0.5 text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <input
+            type="range"
+            min={0}
+            max={scrubLength - 1}
+            value={scrubPos}
+            onChange={(e) => setScrubPos(Number(e.target.value))}
+            className="w-28 accent-blue-500 sm:w-48"
+          />
+          <button
+            onClick={() => setScrubPos(scrubPos + 1)}
+            disabled={scrubPos >= scrubLength - 1}
+            title="Next location"
+            className="rounded p-0.5 text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+          <span className="text-xs whitespace-nowrap text-gray-700 dark:text-gray-200">
+            {scrubPos + 1}/{scrubLength}
+            {scrubDate
+              ? ` · ${new Date(scrubDate).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`
+              : ''}
+          </span>
+        </div>
+      )}
+
+      {/* Time filter + fit-all — Leaflet-style control bar, bottom-left */}
       {mapReady && (
         <div className="pointer-events-auto absolute bottom-[38px] left-[10px] z-[1000] flex overflow-hidden rounded border border-gray-300 bg-white shadow-sm dark:border-gray-600 dark:bg-gray-800">
           {TIME_FILTER_OPTIONS.map(({ value, label }) => (
@@ -371,7 +556,7 @@ export const LocationMap = () => {
               key={value}
               onClick={() => useStore.getState().setTimeFilter(value)}
               title={value === 'all' ? 'Show all history' : `Show last ${value}`}
-              className={`border-r px-2.5 py-1.5 text-xs font-medium last:border-r-0 transition-colors border-gray-300 dark:border-gray-600 ${
+              className={`border-r border-gray-300 px-2.5 py-1.5 text-xs font-medium transition-colors dark:border-gray-600 ${
                 timeFilter === value
                   ? 'bg-blue-500 text-white'
                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700'
@@ -380,6 +565,13 @@ export const LocationMap = () => {
               {label}
             </button>
           ))}
+          <button
+            onClick={fitAllDevices}
+            title="Fit all devices in view"
+            className="px-2.5 py-1.5 text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+          >
+            <Expand className="h-3.5 w-3.5" />
+          </button>
         </div>
       )}
 
