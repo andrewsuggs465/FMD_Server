@@ -1,5 +1,5 @@
 import { logout, useStore } from '@/lib/store';
-import { decryptData, sign, unwrapPrivateKey } from './crypto';
+import { decryptData, hashPasswordForLogin, sign, unwrapPrivateKey } from './crypto';
 import {
   BaseApiService,
   HTTP,
@@ -195,4 +195,63 @@ export class ApiV1Service extends BaseApiService {
     const json = JSON.parse(text) as TileServerUrlResponse;
     return json.TileServerUrl;
   }
+
+  async loginAsTracker(fmdId: string, password: string, label: string, color: string): Promise<void> {
+    const salt = await this.getSalt(fmdId);
+    const passwordAuthHash = hashPasswordForLogin(password, salt);
+
+    // Use fetch directly so a 401 doesn't auto-logout the main account
+    const accessResponse = await fetch(ENDPOINTS.REQUEST_ACCESS, {
+      method: HTTP.PUT,
+      headers: JSON_HEADER,
+      body: JSON.stringify({
+        IDT: fmdId,
+        Data: passwordAuthHash,
+        SessionDurationSeconds: ONE_WEEK_SECONDS,
+      }),
+    });
+
+    if (!accessResponse.ok) {
+      const text = await accessResponse.text();
+      throw new Error(text || 'Login failed');
+    }
+
+    const accessJson = (await accessResponse.json()) as DataPackage;
+    const sessionToken = accessJson.Data;
+
+    const wrappedPrivateKey = await this.getWrappedPrivateKey(sessionToken);
+    const { rsaEncKey, rsaSigKey } = await unwrapPrivateKey(password, wrappedPrivateKey);
+
+    const { addTracker } = useStore.getState();
+    await addTracker({ fmdId, label, sessionToken, rsaEncKey, rsaSigKey, color });
+  }
+}
+
+// Standalone — does not touch main account auth so a 401 throws rather than logging out
+export async function getLocationsForDevice(
+  sessionToken: string,
+  rsaEncKey: CryptoKey
+): Promise<Location[]> {
+  const response = await fetch(ENDPOINTS.LOCATIONS, {
+    method: HTTP.POST,
+    headers: JSON_HEADER,
+    body: JSON.stringify({ IDT: sessionToken, Data: '' }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(response.status === 401 ? 'Tracker session expired' : (text || 'Request failed'));
+  }
+
+  const data = (await response.json()) as string[];
+
+  const decryptedLocations = await Promise.all(
+    data.map(async (jsonStr) => {
+      const pkg = JSON.parse(jsonStr) as DataPackage;
+      const decrypted = await decryptData(rsaEncKey, pkg.Data);
+      return JSON.parse(decrypted) as Location;
+    })
+  );
+
+  return decryptedLocations;
 }

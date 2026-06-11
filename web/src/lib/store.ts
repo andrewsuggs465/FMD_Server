@@ -1,12 +1,15 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { storeKeys, clearKeys, getKeys } from '@/lib/keystore';
+import { storeKeys, clearKeys, getKeys, storeTrackerKeys, getTrackerKeys, clearTrackerKeys } from '@/lib/keystore';
 import type { Location } from '@/lib/api';
 import type { Language } from '@/lib/i18n';
 
 export type Theme = 'light' | 'dark' | 'system';
 export type UnitSystem = 'metric' | 'imperial';
+export type TimeFilter = '1h' | '6h' | '24h' | '7d' | 'all';
 export type { Language } from '@/lib/i18n';
+
+export const TRACKER_COLORS = ['#f97316', '#a855f7', '#ef4444', '#14b8a6', '#eab308', '#ec4899'];
 
 interface UserData {
   fmdId: string;
@@ -14,6 +17,28 @@ interface UserData {
   rsaEncKey: CryptoKey;
   rsaSigKey: CryptoKey;
 }
+
+interface PersistedTracker {
+  fmdId: string;
+  label: string;
+  sessionToken: string;
+  color: string;
+}
+
+export interface TrackerDevice {
+  fmdId: string;
+  label: string;
+  sessionToken: string;
+  rsaEncKey: CryptoKey;
+  rsaSigKey: CryptoKey;
+  locations: Location[];
+  visible: boolean;
+  color: string;
+}
+
+const KEY_AUTH = 'fmd-auth';
+const KEY_SETTINGS = 'fmd-settings';
+const KEY_TRACKERS = 'fmd-trackers';
 
 interface AppState {
   isLoggedIn: boolean;
@@ -28,6 +53,10 @@ interface AppState {
   locations: Location[];
   currentLocationIndex: number;
   isLocationsLoading: boolean;
+  phoneVisible: boolean;
+
+  trackers: TrackerDevice[];
+  timeFilter: TimeFilter;
 
   pictures: string[];
   isPicturesLoading: boolean;
@@ -37,10 +66,19 @@ interface AppState {
   restoreAuth: () => Promise<void>;
   setTheme: (theme: Theme) => void;
   setLanguage: (language: Language) => void;
-}
 
-const KEY_AUTH = 'fmd-auth';
-const KEY_SETTINGS = 'fmd-settings';
+  selectedDeviceId: string | null;
+  setSelectedDevice: (id: string | null) => void;
+
+  togglePhoneVisible: () => void;
+  setTimeFilter: (filter: TimeFilter) => void;
+
+  addTracker: (device: Omit<TrackerDevice, 'locations' | 'visible'>) => Promise<void>;
+  removeTracker: (fmdId: string) => Promise<void>;
+  toggleTrackerVisible: (fmdId: string) => void;
+  setTrackerLocations: (fmdId: string, locations: Location[]) => void;
+  restoreTrackers: () => Promise<void>;
+}
 
 export const useStore = create<AppState>()(
   persist(
@@ -58,6 +96,10 @@ export const useStore = create<AppState>()(
       isPushUrlLoading: false,
       isLocationsLoading: false,
       isPicturesLoading: false,
+      phoneVisible: true,
+      trackers: [],
+      timeFilter: 'all',
+      selectedDeviceId: null,
 
       setUserData: async (data: UserData, persistent: boolean) => {
         if (persistent) {
@@ -135,12 +177,109 @@ export const useStore = create<AppState>()(
 
       setLanguage: (language: Language) => {
         set({ language });
-        // Language change is synced from main.tsx Root component
+      },
+
+      setSelectedDevice: (id) => {
+        set({ selectedDeviceId: id });
+      },
+
+      togglePhoneVisible: () => {
+        set((state) => ({ phoneVisible: !state.phoneVisible }));
+      },
+
+      setTimeFilter: (filter: TimeFilter) => {
+        set({ timeFilter: filter });
+      },
+
+      addTracker: async (device) => {
+        await storeTrackerKeys(device.fmdId, {
+          rsaEncKey: device.rsaEncKey,
+          rsaSigKey: device.rsaSigKey,
+        });
+
+        const persisted: PersistedTracker = {
+          fmdId: device.fmdId,
+          label: device.label,
+          sessionToken: device.sessionToken,
+          color: device.color,
+        };
+
+        const existing = JSON.parse(localStorage.getItem(KEY_TRACKERS) || '[]') as PersistedTracker[];
+        const updated = [...existing.filter((t) => t.fmdId !== device.fmdId), persisted];
+        localStorage.setItem(KEY_TRACKERS, JSON.stringify(updated));
+
+        set((state) => ({
+          trackers: [
+            ...state.trackers.filter((t) => t.fmdId !== device.fmdId),
+            { ...device, locations: [], visible: true },
+          ],
+        }));
+      },
+
+      removeTracker: async (fmdId) => {
+        await clearTrackerKeys(fmdId);
+        const existing = JSON.parse(localStorage.getItem(KEY_TRACKERS) || '[]') as PersistedTracker[];
+        localStorage.setItem(KEY_TRACKERS, JSON.stringify(existing.filter((t) => t.fmdId !== fmdId)));
+        set((state) => ({
+          trackers: state.trackers.filter((t) => t.fmdId !== fmdId),
+          selectedDeviceId: state.selectedDeviceId === fmdId ? null : state.selectedDeviceId,
+        }));
+      },
+
+      toggleTrackerVisible: (fmdId) => {
+        set((state) => ({
+          trackers: state.trackers.map((t) =>
+            t.fmdId === fmdId ? { ...t, visible: !t.visible } : t
+          ),
+        }));
+      },
+
+      setTrackerLocations: (fmdId, locations) => {
+        set((state) => ({
+          trackers: state.trackers.map((t) =>
+            t.fmdId === fmdId ? { ...t, locations } : t
+          ),
+        }));
+      },
+
+      restoreTrackers: async () => {
+        const stored = localStorage.getItem(KEY_TRACKERS);
+        if (!stored) return;
+
+        let persisted: PersistedTracker[];
+        try {
+          persisted = JSON.parse(stored) as PersistedTracker[];
+        } catch {
+          return;
+        }
+
+        const restored: TrackerDevice[] = [];
+        for (const p of persisted) {
+          try {
+            const keys = await getTrackerKeys(p.fmdId);
+            if (keys) {
+              restored.push({
+                fmdId: p.fmdId,
+                label: p.label,
+                sessionToken: p.sessionToken,
+                color: p.color,
+                rsaEncKey: keys.rsaEncKey,
+                rsaSigKey: keys.rsaSigKey,
+                locations: [],
+                visible: true,
+              });
+            }
+          } catch {
+            // Skip trackers whose keys failed to load
+          }
+        }
+
+        if (restored.length > 0) {
+          set({ trackers: restored });
+        }
       },
     }),
 
-    // Persist some of the state
-    // https://github.com/pmndrs/zustand/blob/main/docs/integrations/persisting-store-data.md
     {
       name: KEY_SETTINGS,
       storage: createJSONStorage(() => localStorage),

@@ -58,3 +58,38 @@ export async function clearKeys(): Promise<void> {
     request.onsuccess = () => resolve();
   });
 }
+
+const trackerIdbKey = (deviceId: string) => `tracker:${deviceId}`;
+
+export async function storeTrackerKeys(deviceId: string, keys: KeyStore): Promise<void> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.put(keys, trackerIdbKey(deviceId));
+    request.onerror = () => reject(new Error(request.error?.message || 'Failed to store tracker keys'));
+    request.onsuccess = () => resolve();
+  });
+}
+
+export async function getTrackerKeys(deviceId: string): Promise<KeyStore | null> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readonly');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.get(trackerIdbKey(deviceId));
+    request.onerror = () => reject(new Error(request.error?.message || 'Failed to get tracker keys'));
+    request.onsuccess = () => resolve((request.result as KeyStore | undefined) || null);
+  });
+}
+
+export async function clearTrackerKeys(deviceId: string): Promise<void> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.delete(trackerIdbKey(deviceId));
+    request.onerror = () => reject(new Error(request.error?.message || 'Failed to clear tracker keys'));
+    request.onsuccess = () => resolve();
+  });
+}

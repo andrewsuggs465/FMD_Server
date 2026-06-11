@@ -1,22 +1,25 @@
 import { useState, useEffect } from 'react';
 import { LoginForm } from '@/components/LoginForm';
-import { DevicePanel } from '@/components/DevicePanel';
+import { SidePanel } from '@/components/SidePanel';
 import { LocationMap } from '@/components/LocationMap';
 import { PhotosModal } from '@/components/modals/PhotosModal';
 import { SettingsModal } from '@/components/modals/SettingsModal';
+import { AddTrackerModal } from '@/components/modals/AddTrackerModal';
 import { Header } from '@/components/Header';
 import { Spinner } from '@/components/ui/spinner';
 import { apiService } from '@/lib/apiService';
 import { useStore } from '@/lib/store';
+import { getLocationsForDevice } from '@/lib/apiv1';
 import { toast } from 'sonner';
 
 const minute = 60 * 1000;
 
 const Home = () => {
-  const { isLoggedIn, userData, wasAuthRestoreTried, locations } = useStore();
+  const { isLoggedIn, userData, wasAuthRestoreTried, locations, trackers } = useStore();
 
   const [photosOpen, setPhotosOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [addTrackerOpen, setAddTrackerOpen] = useState(false);
   const [lastLocateTime, setLastLocateTime] = useState<number | null>(null);
   const [lastLocationsFetchedTime, setLastLocationsFetchedTime] = useState<number | null>(null);
 
@@ -31,9 +34,7 @@ const Home = () => {
       const hasNewLocations = decryptedLocations.length > locations.length;
 
       if (isFirstLoad || hasNewLocations) {
-        useStore.setState({
-          currentLocationIndex: decryptedLocations.length - 1,
-        });
+        useStore.setState({ currentLocationIndex: decryptedLocations.length - 1 });
       }
 
       setLastLocationsFetchedTime(Date.now());
@@ -46,56 +47,69 @@ const Home = () => {
     }
   };
 
+  const fetchTrackerLocations = async () => {
+    const { trackers: current, setTrackerLocations } = useStore.getState();
+    await Promise.all(
+      current.map(async (tracker) => {
+        try {
+          const locs = await getLocationsForDevice(tracker.sessionToken, tracker.rsaEncKey);
+          setTrackerLocations(tracker.fmdId, locs);
+        } catch (error) {
+          const msg = error instanceof Error ? error.message : '';
+          if (msg !== 'Tracker session expired') console.warn(`Tracker ${tracker.fmdId}: ${msg}`);
+        }
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) void useStore.getState().restoreTrackers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn]);
+
   useEffect(() => {
     if (isLoggedIn && userData) {
       void fetchLocations();
+      void fetchTrackerLocations();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
 
-  // Regular background polling while browser tab is visibile
+  useEffect(() => {
+    if (isLoggedIn && trackers.length > 0) void fetchTrackerLocations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trackers.length]);
+
   useEffect(() => {
     if (!isLoggedIn || !userData) return;
 
     const getPollingInterval = () => {
       if (!lastLocateTime) return 15 * minute;
-
-      // If just after a locate command, poll more often
       const timeSinceLocate = Date.now() - lastLocateTime;
-      if (timeSinceLocate < 1 * minute) {
-        return 15 * 1000; // 15 seconds
-      }
-      if (timeSinceLocate < 2 * minute) {
-        return 20 * 1000; // 20 seconds
-      }
-
+      if (timeSinceLocate < 1 * minute) return 15 * 1000;
+      if (timeSinceLocate < 2 * minute) return 20 * 1000;
       return 15 * minute;
     };
 
     const poll = () => {
       if (document.hidden) return;
       void fetchLocations(false);
+      void fetchTrackerLocations();
     };
 
     const interval = setInterval(poll, getPollingInterval());
-
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn, userData, lastLocateTime]);
 
-  // Poll when browser tab is resumed
   useEffect(() => {
     if (!isLoggedIn || !userData) return;
 
     const poll = () => {
-      if (document.hidden) return;
-
-      if (!lastLocationsFetchedTime) return;
-
-      const timeSinceLocate = Date.now() - lastLocationsFetchedTime;
-      if (timeSinceLocate < 5 * minute) return;
-
+      if (document.hidden || !lastLocationsFetchedTime) return;
+      if (Date.now() - lastLocationsFetchedTime < 5 * minute) return;
       void fetchLocations(false);
+      void fetchTrackerLocations();
     };
 
     window.addEventListener('visibilitychange', poll);
@@ -127,9 +141,10 @@ const Home = () => {
         <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 lg:flex-row lg:overflow-hidden">
           {userData && (
             <div className="order-2 w-full lg:order-1 lg:w-100 lg:shrink-0">
-              <DevicePanel
+              <SidePanel
                 onViewPhotos={() => setPhotosOpen(true)}
                 onLocateCommand={() => setLastLocateTime(Date.now())}
+                onAddTracker={() => setAddTrackerOpen(true)}
               />
             </div>
           )}
@@ -141,8 +156,8 @@ const Home = () => {
       </div>
 
       <PhotosModal isOpen={photosOpen} onClose={() => setPhotosOpen(false)} />
-
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <AddTrackerModal isOpen={addTrackerOpen} onClose={() => setAddTrackerOpen(false)} />
     </>
   );
 };
