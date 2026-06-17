@@ -48,7 +48,11 @@ const Home = () => {
   };
 
   const fetchTrackerLocations = async () => {
-    const { trackers: current, setTrackerLocations } = useStore.getState();
+    const {
+      trackers: current,
+      setTrackerLocations,
+      setTrackerSessionExpired,
+    } = useStore.getState();
     await Promise.all(
       current.map(async (tracker) => {
         try {
@@ -56,7 +60,11 @@ const Home = () => {
           setTrackerLocations(tracker.fmdId, locs);
         } catch (error) {
           const msg = error instanceof Error ? error.message : '';
-          if (msg !== 'Tracker session expired') console.warn(`Tracker ${tracker.fmdId}: ${msg}`);
+          if (msg === 'Tracker session expired') {
+            setTrackerSessionExpired(tracker.fmdId, true);
+          } else {
+            console.warn(`Tracker ${tracker.fmdId}: ${msg}`);
+          }
         }
       })
     );

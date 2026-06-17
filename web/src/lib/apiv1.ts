@@ -147,6 +147,33 @@ export class ApiV1Service extends BaseApiService {
     });
   }
 
+  async sendCommandForDevice(
+    sessionToken: string,
+    rsaSigKey: CryptoKey,
+    command: string
+  ): Promise<void> {
+    const timestamp = Date.now();
+    const signature = await sign(rsaSigKey, `${timestamp}:${command}`);
+
+    const response = await fetch(ENDPOINTS.COMMAND, {
+      method: HTTP.POST,
+      headers: JSON_HEADER,
+      body: JSON.stringify({
+        IDT: sessionToken,
+        Data: command,
+        UnixTime: timestamp,
+        CmdSig: signature,
+      }),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(
+        response.status === 401 ? 'Tracker session expired' : text || 'Command failed'
+      );
+    }
+  }
+
   async getLocations(): Promise<Location[]> {
     const { userData } = useStore.getState();
 
@@ -196,7 +223,12 @@ export class ApiV1Service extends BaseApiService {
     return json.TileServerUrl;
   }
 
-  async loginAsTracker(fmdId: string, password: string, label: string, color: string): Promise<void> {
+  async loginAsTracker(
+    fmdId: string,
+    password: string,
+    label: string,
+    color: string
+  ): Promise<void> {
     const salt = await this.getSalt(fmdId);
     const passwordAuthHash = hashPasswordForLogin(password, salt);
 
@@ -225,6 +257,29 @@ export class ApiV1Service extends BaseApiService {
     const { addTracker } = useStore.getState();
     await addTracker({ fmdId, label, sessionToken, rsaEncKey, rsaSigKey, color });
   }
+
+  async refreshTrackerSession(fmdId: string, password: string): Promise<void> {
+    const salt = await this.getSalt(fmdId);
+    const passwordAuthHash = hashPasswordForLogin(password, salt);
+
+    const response = await fetch(ENDPOINTS.REQUEST_ACCESS, {
+      method: HTTP.PUT,
+      headers: JSON_HEADER,
+      body: JSON.stringify({
+        IDT: fmdId,
+        Data: passwordAuthHash,
+        SessionDurationSeconds: ONE_WEEK_SECONDS,
+      }),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text || 'Session refresh failed');
+    }
+
+    const json = (await response.json()) as DataPackage;
+    await useStore.getState().updateTrackerSessionToken(fmdId, json.Data);
+  }
 }
 
 // Standalone — does not touch main account auth so a 401 throws rather than logging out
@@ -240,7 +295,7 @@ export async function getLocationsForDevice(
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(response.status === 401 ? 'Tracker session expired' : (text || 'Request failed'));
+    throw new Error(response.status === 401 ? 'Tracker session expired' : text || 'Request failed');
   }
 
   const data = (await response.json()) as string[];

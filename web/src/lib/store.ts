@@ -1,6 +1,13 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { storeKeys, clearKeys, getKeys, storeTrackerKeys, getTrackerKeys, clearTrackerKeys } from '@/lib/keystore';
+import {
+  storeKeys,
+  clearKeys,
+  getKeys,
+  storeTrackerKeys,
+  getTrackerKeys,
+  clearTrackerKeys,
+} from '@/lib/keystore';
 import type { Location } from '@/lib/api';
 import type { Language } from '@/lib/i18n';
 
@@ -34,6 +41,7 @@ export interface TrackerDevice {
   locations: Location[];
   visible: boolean;
   color: string;
+  sessionExpired: boolean;
 }
 
 const KEY_AUTH = 'fmd-auth';
@@ -73,10 +81,14 @@ interface AppState {
   togglePhoneVisible: () => void;
   setTimeFilter: (filter: TimeFilter) => void;
 
-  addTracker: (device: Omit<TrackerDevice, 'locations' | 'visible'>) => Promise<void>;
+  addTracker: (
+    device: Omit<TrackerDevice, 'locations' | 'visible' | 'sessionExpired'>
+  ) => Promise<void>;
   removeTracker: (fmdId: string) => Promise<void>;
   toggleTrackerVisible: (fmdId: string) => void;
   setTrackerLocations: (fmdId: string, locations: Location[]) => void;
+  setTrackerSessionExpired: (fmdId: string, expired: boolean) => void;
+  updateTrackerSessionToken: (fmdId: string, sessionToken: string) => Promise<void>;
   restoreTrackers: () => Promise<void>;
 }
 
@@ -204,22 +216,29 @@ export const useStore = create<AppState>()(
           color: device.color,
         };
 
-        const existing = JSON.parse(localStorage.getItem(KEY_TRACKERS) || '[]') as PersistedTracker[];
+        const existing = JSON.parse(
+          localStorage.getItem(KEY_TRACKERS) || '[]'
+        ) as PersistedTracker[];
         const updated = [...existing.filter((t) => t.fmdId !== device.fmdId), persisted];
         localStorage.setItem(KEY_TRACKERS, JSON.stringify(updated));
 
         set((state) => ({
           trackers: [
             ...state.trackers.filter((t) => t.fmdId !== device.fmdId),
-            { ...device, locations: [], visible: true },
+            { ...device, locations: [], visible: true, sessionExpired: false },
           ],
         }));
       },
 
       removeTracker: async (fmdId) => {
         await clearTrackerKeys(fmdId);
-        const existing = JSON.parse(localStorage.getItem(KEY_TRACKERS) || '[]') as PersistedTracker[];
-        localStorage.setItem(KEY_TRACKERS, JSON.stringify(existing.filter((t) => t.fmdId !== fmdId)));
+        const existing = JSON.parse(
+          localStorage.getItem(KEY_TRACKERS) || '[]'
+        ) as PersistedTracker[];
+        localStorage.setItem(
+          KEY_TRACKERS,
+          JSON.stringify(existing.filter((t) => t.fmdId !== fmdId))
+        );
         set((state) => ({
           trackers: state.trackers.filter((t) => t.fmdId !== fmdId),
           selectedDeviceId: state.selectedDeviceId === fmdId ? null : state.selectedDeviceId,
@@ -237,7 +256,29 @@ export const useStore = create<AppState>()(
       setTrackerLocations: (fmdId, locations) => {
         set((state) => ({
           trackers: state.trackers.map((t) =>
-            t.fmdId === fmdId ? { ...t, locations } : t
+            t.fmdId === fmdId ? { ...t, locations, sessionExpired: false } : t
+          ),
+        }));
+      },
+
+      setTrackerSessionExpired: (fmdId, expired) => {
+        set((state) => ({
+          trackers: state.trackers.map((t) =>
+            t.fmdId === fmdId ? { ...t, sessionExpired: expired } : t
+          ),
+        }));
+      },
+
+      updateTrackerSessionToken: async (fmdId, sessionToken) => {
+        const existing = JSON.parse(
+          localStorage.getItem(KEY_TRACKERS) || '[]'
+        ) as PersistedTracker[];
+        const updated = existing.map((t) => (t.fmdId === fmdId ? { ...t, sessionToken } : t));
+        localStorage.setItem(KEY_TRACKERS, JSON.stringify(updated));
+
+        set((state) => ({
+          trackers: state.trackers.map((t) =>
+            t.fmdId === fmdId ? { ...t, sessionToken, sessionExpired: false } : t
           ),
         }));
       },
@@ -267,6 +308,7 @@ export const useStore = create<AppState>()(
                 rsaSigKey: keys.rsaSigKey,
                 locations: [],
                 visible: true,
+                sessionExpired: false,
               });
             }
           } catch {
