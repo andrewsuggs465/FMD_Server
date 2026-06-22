@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Bell,
   BellOff,
+  Crosshair,
   KeyRound,
   Lock,
   MapPin,
@@ -10,6 +11,7 @@ import {
   ShieldOff,
   Trash2,
   Unlock,
+  VolumeX,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useStore, type TrackerDevice } from '@/lib/store';
@@ -170,6 +172,24 @@ export const TrackerPanel = ({ tracker }: TrackerPanelProps) => {
           >
             <ShieldOff className="h-4 w-4" />
             Disarm
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void sendPouchCommand('locate')}
+            disabled={commandDisabled}
+            title="Force a fresh GNSS fix and location upload"
+          >
+            <Crosshair className="h-4 w-4" />
+            Locate
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void sendPouchCommand('silence')}
+            disabled={commandDisabled}
+            title="Stop an active alarm"
+          >
+            <VolumeX className="h-4 w-4" />
+            Silence
           </Button>
           <Button
             variant="destructive"
