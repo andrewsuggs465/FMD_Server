@@ -87,7 +87,7 @@ export const LoginForm = () => {
         toast.warning(
           'Web Workers are not supported by this browser. Hashing password on main thread.'
         );
-        passwordHash = hashPasswordForLogin(password, salt);
+        passwordHash = await hashPasswordForLogin(password, salt);
       }
 
       clearTimeout(timeOut);

@@ -6,6 +6,8 @@ import {
   JSON_HEADER,
   Location,
   ONE_WEEK_SECONDS,
+  buildHttpErrorMessage,
+  buildNetworkErrorMessage,
   requestObject,
 } from './api';
 
@@ -91,19 +93,26 @@ export class ApiV1Service extends BaseApiService {
   async getPushUrl(): Promise<string> {
     const { userData } = useStore.getState();
 
-    const response = await fetch(ENDPOINTS.PUSH, {
-      method: HTTP.POST,
-      headers: JSON_HEADER,
-      body: JSON.stringify({ IDT: userData!.sessionToken, Data: '' }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(ENDPOINTS.PUSH, {
+        method: HTTP.POST,
+        headers: JSON_HEADER,
+        body: JSON.stringify({ IDT: userData!.sessionToken, Data: '' }),
+      });
+    } catch (error) {
+      throw new Error(buildNetworkErrorMessage(ENDPOINTS.PUSH, HTTP.POST, error));
+    }
 
     if (!response.ok) {
       const text = await response.text();
       if (response.status === 401) {
         void logout();
-        throw new Error('Session expired');
+        throw new Error(
+          `${buildHttpErrorMessage(response, ENDPOINTS.PUSH, HTTP.POST, text)}\nAction: log in again.`
+        );
       }
-      throw new Error(text || 'Request failed');
+      throw new Error(buildHttpErrorMessage(response, ENDPOINTS.PUSH, HTTP.POST, text));
     }
 
     return response.text();
@@ -155,21 +164,40 @@ export class ApiV1Service extends BaseApiService {
     const timestamp = Date.now();
     const signature = await sign(rsaSigKey, `${timestamp}:${command}`);
 
-    const response = await fetch(ENDPOINTS.COMMAND, {
-      method: HTTP.POST,
-      headers: JSON_HEADER,
-      body: JSON.stringify({
-        IDT: sessionToken,
-        Data: command,
-        UnixTime: timestamp,
-        CmdSig: signature,
-      }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(ENDPOINTS.COMMAND, {
+        method: HTTP.POST,
+        headers: JSON_HEADER,
+        body: JSON.stringify({
+          IDT: sessionToken,
+          Data: command,
+          UnixTime: timestamp,
+          CmdSig: signature,
+        }),
+      });
+    } catch (error) {
+      throw new Error(
+        `SecurePouch command '${command}' could not reach the server.\n${buildNetworkErrorMessage(
+          ENDPOINTS.COMMAND,
+          HTTP.POST,
+          error
+        )}`
+      );
+    }
 
     if (!response.ok) {
       const text = await response.text();
+      if (response.status === 401) {
+        throw new Error('Tracker session expired');
+      }
       throw new Error(
-        response.status === 401 ? 'Tracker session expired' : text || 'Command failed'
+        `SecurePouch command '${command}' was not queued.\n${buildHttpErrorMessage(
+          response,
+          ENDPOINTS.COMMAND,
+          HTTP.POST,
+          text
+        )}`
       );
     }
   }
@@ -212,11 +240,16 @@ export class ApiV1Service extends BaseApiService {
   }
 
   async getTileServerUrl(): Promise<string> {
-    const response = await fetch(ENDPOINTS.TILE_SERVER);
+    let response: Response;
+    try {
+      response = await fetch(ENDPOINTS.TILE_SERVER);
+    } catch (error) {
+      throw new Error(buildNetworkErrorMessage(ENDPOINTS.TILE_SERVER, HTTP.GET, error));
+    }
 
     const text = await response.text();
     if (!response.ok) {
-      throw new Error(text || 'Request failed');
+      throw new Error(buildHttpErrorMessage(response, ENDPOINTS.TILE_SERVER, HTTP.GET, text));
     }
 
     const json = JSON.parse(text) as TileServerUrlResponse;
@@ -230,22 +263,29 @@ export class ApiV1Service extends BaseApiService {
     color: string
   ): Promise<void> {
     const salt = await this.getSalt(fmdId);
-    const passwordAuthHash = hashPasswordForLogin(password, salt);
+    const passwordAuthHash = await hashPasswordForLogin(password, salt);
 
     // Use fetch directly so a 401 doesn't auto-logout the main account
-    const accessResponse = await fetch(ENDPOINTS.REQUEST_ACCESS, {
-      method: HTTP.PUT,
-      headers: JSON_HEADER,
-      body: JSON.stringify({
-        IDT: fmdId,
-        Data: passwordAuthHash,
-        SessionDurationSeconds: ONE_WEEK_SECONDS,
-      }),
-    });
+    let accessResponse: Response;
+    try {
+      accessResponse = await fetch(ENDPOINTS.REQUEST_ACCESS, {
+        method: HTTP.PUT,
+        headers: JSON_HEADER,
+        body: JSON.stringify({
+          IDT: fmdId,
+          Data: passwordAuthHash,
+          SessionDurationSeconds: ONE_WEEK_SECONDS,
+        }),
+      });
+    } catch (error) {
+      throw new Error(buildNetworkErrorMessage(ENDPOINTS.REQUEST_ACCESS, HTTP.PUT, error));
+    }
 
     if (!accessResponse.ok) {
       const text = await accessResponse.text();
-      throw new Error(text || 'Login failed');
+      throw new Error(
+        buildHttpErrorMessage(accessResponse, ENDPOINTS.REQUEST_ACCESS, HTTP.PUT, text)
+      );
     }
 
     const accessJson = (await accessResponse.json()) as DataPackage;
@@ -260,21 +300,26 @@ export class ApiV1Service extends BaseApiService {
 
   async refreshTrackerSession(fmdId: string, password: string): Promise<void> {
     const salt = await this.getSalt(fmdId);
-    const passwordAuthHash = hashPasswordForLogin(password, salt);
+    const passwordAuthHash = await hashPasswordForLogin(password, salt);
 
-    const response = await fetch(ENDPOINTS.REQUEST_ACCESS, {
-      method: HTTP.PUT,
-      headers: JSON_HEADER,
-      body: JSON.stringify({
-        IDT: fmdId,
-        Data: passwordAuthHash,
-        SessionDurationSeconds: ONE_WEEK_SECONDS,
-      }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(ENDPOINTS.REQUEST_ACCESS, {
+        method: HTTP.PUT,
+        headers: JSON_HEADER,
+        body: JSON.stringify({
+          IDT: fmdId,
+          Data: passwordAuthHash,
+          SessionDurationSeconds: ONE_WEEK_SECONDS,
+        }),
+      });
+    } catch (error) {
+      throw new Error(buildNetworkErrorMessage(ENDPOINTS.REQUEST_ACCESS, HTTP.PUT, error));
+    }
 
     if (!response.ok) {
       const text = await response.text();
-      throw new Error(text || 'Session refresh failed');
+      throw new Error(buildHttpErrorMessage(response, ENDPOINTS.REQUEST_ACCESS, HTTP.PUT, text));
     }
 
     const json = (await response.json()) as DataPackage;
@@ -287,15 +332,24 @@ export async function getLocationsForDevice(
   sessionToken: string,
   rsaEncKey: CryptoKey
 ): Promise<Location[]> {
-  const response = await fetch(ENDPOINTS.LOCATIONS, {
-    method: HTTP.POST,
-    headers: JSON_HEADER,
-    body: JSON.stringify({ IDT: sessionToken, Data: '' }),
-  });
+  let response: Response;
+  try {
+    response = await fetch(ENDPOINTS.LOCATIONS, {
+      method: HTTP.POST,
+      headers: JSON_HEADER,
+      body: JSON.stringify({ IDT: sessionToken, Data: '' }),
+    });
+  } catch (error) {
+    throw new Error(buildNetworkErrorMessage(ENDPOINTS.LOCATIONS, HTTP.POST, error));
+  }
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(response.status === 401 ? 'Tracker session expired' : text || 'Request failed');
+    throw new Error(
+      response.status === 401
+        ? 'Tracker session expired'
+        : buildHttpErrorMessage(response, ENDPOINTS.LOCATIONS, HTTP.POST, text)
+    );
   }
 
   const data = (await response.json()) as string[];

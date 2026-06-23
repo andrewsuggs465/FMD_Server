@@ -29,10 +29,13 @@ const base64Encode = (bytesToEncode: Uint8Array) => {
 
 // Section: Password and hashing
 
-export const hashPasswordForLogin = (password: string, salt: string) => {
+export const hashPasswordForLogin = async (password: string, salt: string): Promise<string> => {
   const saltBytes = base64Decode(salt);
   const contextPassword = CONTEXT_STRING_LOGIN + password;
   const passwordBytes = new TextEncoder().encode(contextPassword);
+
+  // Yield to the event loop before the CPU-intensive Argon2 so the UI doesn't freeze.
+  await new Promise<void>((resolve) => setTimeout(resolve, 0));
 
   const hash = argon2id(passwordBytes, saltBytes, {
     t: ARGON2_T,
@@ -42,7 +45,6 @@ export const hashPasswordForLogin = (password: string, salt: string) => {
   });
 
   let hashBase64 = base64Encode(hash);
-  // Remove base64 padding for Argon2 format
   while (hashBase64.endsWith('=')) {
     hashBase64 = hashBase64.slice(0, -1);
   }

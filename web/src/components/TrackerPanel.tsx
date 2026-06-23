@@ -32,12 +32,17 @@ export const TrackerPanel = ({ tracker }: TrackerPanelProps) => {
   const lastLocation = tracker.locations[tracker.locations.length - 1];
   const lastSeenAge = lastLocation ? Date.now() - lastLocation.date : null;
   const isRecentlySeen = lastSeenAge !== null && lastSeenAge < 5 * 60 * 1000;
+  const relayHint = isRecentlySeen
+    ? 'Fresh location was uploaded by Android BLE relay or nRF9151-DK LTE/GNSS.'
+    : 'Waiting for Android BLE relay or nRF9151-DK LTE/GNSS to poll the server and upload a fresh location. If a command stays queued, check phone push/BLE range or DK LTE/GNSS logs.';
 
   const sendPouchCommand = async (command: string) => {
     setLoadingCommand(command);
     try {
       await apiService.sendCommandForDevice(tracker.sessionToken, tracker.rsaSigKey, command);
-      toast.success(`SecurePouch command queued: ${command}`);
+      toast.success(
+        `SecurePouch command queued: ${command}\nPickup path: Android BLE relay or nRF9151-DK standalone LTE.`
+      );
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Command failed';
       if (message === 'Tracker session expired') {
@@ -133,7 +138,7 @@ export const TrackerPanel = ({ tracker }: TrackerPanelProps) => {
       <div className="dark:border-fmd-dark-border dark:bg-fmd-dark rounded-lg border border-gray-200 bg-white p-4">
         <div className="mb-3 flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
           <Radio className="h-4 w-4" />
-          SecurePouch Controls
+          SecurePouch Server Queue
         </div>
 
         <div className="grid grid-cols-2 gap-2">
@@ -208,8 +213,12 @@ export const TrackerPanel = ({ tracker }: TrackerPanelProps) => {
         </div>
 
         <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-          Commands are queued on the pouch account and will be picked up by the Android relay or
-          nRF9151 firmware.
+          Commands are queued on the pouch account. Pickup path is whichever is online: Android BLE
+          relay or nRF9151-DK standalone LTE.
+        </div>
+        <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+          If the command remains pending, check that the Android app has a push URL or that the DK
+          logs show LTE registered, command poll HTTP 200, and a GNSS fix before upload.
         </div>
       </div>
 
@@ -227,6 +236,7 @@ export const TrackerPanel = ({ tracker }: TrackerPanelProps) => {
           <div className="flex justify-between">
             <span className="text-gray-500 dark:text-gray-400">Relay state</span>
             <span
+              title={relayHint}
               className={
                 isRecentlySeen
                   ? 'text-green-600 dark:text-green-400'
@@ -236,6 +246,7 @@ export const TrackerPanel = ({ tracker }: TrackerPanelProps) => {
               {isRecentlySeen ? 'recently seen' : 'waiting'}
             </span>
           </div>
+          <div className="text-xs text-gray-500 dark:text-gray-400">{relayHint}</div>
           <div className="flex justify-between">
             <span className="text-gray-500 dark:text-gray-400">Session</span>
             <span
